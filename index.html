@@ -130,10 +130,11 @@
       position: relative; aspect-ratio: 1; border-radius: var(--radius);
       overflow: hidden; cursor: pointer; background: var(--clr-dark2);
       border: 1px solid rgba(255,255,255,0.05);
+      will-change: transform;
     }
-    .canvas-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .canvas-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; will-change: transform; }
     .canvas-card img    { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .canvas-card video  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .canvas-card video  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: transform; }
     /* shared overlay (canvas cards) */
     .grid-overlay {
       position: absolute; inset: 0;
@@ -148,16 +149,16 @@
     .canvas-card video, .canvas-card canvas { transition: transform 0.55s ease; }
     .canvas-card:hover video, .canvas-card:hover canvas { transform: scale(1.05); }
     /* Photo card: scale only, no brightness darkening */
-    .photo-card img { transition: transform 0.6s ease; }
+    .photo-card img { transition: transform 0.6s ease; will-change: transform; }
     .photo-card:hover img { transform: scale(1.05); }
 
     /* Clip stack indicator */
     .clip-badge {
       position: absolute; bottom: 10px; right: 10px;
-      background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.22);
       color: rgba(255,255,255,0.85); border-radius: 20px;
       font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 3px 9px; backdrop-filter: blur(4px);
+      padding: 3px 9px;
       display: flex; align-items: center; gap: 4px;
       pointer-events: none; z-index: 3;
       opacity: 0.55; transition: opacity 0.3s ease;
@@ -168,9 +169,8 @@
     .anim-badge {
       position: absolute; top: 12px; left: 12px;
       font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
-      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.15);
       color: rgba(255,255,255,0.55); padding: 3px 9px; border-radius: 20px;
-      backdrop-filter: blur(6px);
     }
 
     /* ── Digital Art Grid ── */
@@ -675,11 +675,13 @@
     function resize() { canvas.width = canvas.offsetWidth * DPR; canvas.height = canvas.offsetHeight * DPR; }
     window.addEventListener('resize', resize); resize();
     const ctx = canvas.getContext('2d');
-    const N = 90;
+    const isMobile = window.innerWidth < 768;
+    const N = isMobile ? 50 : 90;
     const pts = Array.from({length: N}, () => ({
       x: Math.random(), y: Math.random(),
       vx: (Math.random()-0.5)*0.0003, vy: (Math.random()-0.5)*0.0003
     }));
+    let rafId = null;
     function draw() {
       const W = canvas.width/DPR, H = canvas.height/DPR;
       ctx.setTransform(DPR,0,0,DPR,0,0);
@@ -701,8 +703,13 @@
         ctx.beginPath(); ctx.arc(p.x*W,p.y*H,1.5,0,Math.PI*2);
         ctx.fillStyle='rgba(181,169,154,0.55)'; ctx.fill();
       });
-      requestAnimationFrame(draw);
+      rafId = requestAnimationFrame(draw);
     }
+    // Pause hero canvas when scrolled out of view
+    new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { if (!rafId) draw(); }
+      else { cancelAnimationFrame(rafId); rafId = null; }
+    }, { threshold: 0 }).observe(canvas);
     draw();
   })();
 
@@ -1115,12 +1122,16 @@
   (function () {
     const gridVids = document.querySelectorAll('.canvas-card video');
     if (!gridVids.length || !('IntersectionObserver' in window)) return;
+    const timers = new WeakMap();
     const vidObs = new IntersectionObserver(entries => {
       entries.forEach(({ target, isIntersecting }) => {
-        if (isIntersecting) { target.play().catch(() => {}); }
-        else                { target.pause(); }
+        clearTimeout(timers.get(target));
+        timers.set(target, setTimeout(() => {
+          if (isIntersecting) { target.play().catch(() => {}); }
+          else                { target.pause(); }
+        }, 150));
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.25, rootMargin: '-40px 0px' });
     gridVids.forEach(v => vidObs.observe(v));
   })();
 
