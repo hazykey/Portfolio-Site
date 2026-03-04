@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ian Kehayes — 3D Lighting Artist & Compositor. Portfolio of lighting, compositing, VFX, design, and illustration work from shows including Unicorn Academy, Wishenpoof, and more." />
+  <meta name="theme-color" content="#0d0d10" />
+  <meta property="og:title" content="Ian Kehayes — 3D & Digital Art" />
+  <meta property="og:description" content="Portfolio of a 3D Lighting Artist & Compositor based in Halifax, NS." />
+  <meta property="og:type" content="website" />
+  <title>Ian Kehayes — 3D & Digital Art</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d0d10'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='%23b5a99a' font-family='Georgia,serif' font-size='13' font-weight='bold'>IK</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --clr-bg:      #f5f4f2;
+      --clr-surface: #ffffff;
+      --clr-text:    #1a1a1a;
+      --clr-muted:   #6b6b6b;
+      --clr-accent:  #b5a99a;
+      --clr-border:  #e0ddd9;
+      --clr-dark:    #0d0d10;
+      --clr-dark2:   #13131a;
+      --font:        'Segoe UI', system-ui, -apple-system, sans-serif;
+      --radius:      6px;
+      --transition:  0.3s ease;
+      --max-w:       1160px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--clr-bg); color: var(--clr-text); line-height: 1.65; font-size: 16px; }
+    img  { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a    { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(13,13,16,0.88); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 0 2rem; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 1.05rem; font-weight: 600; letter-spacing: 0.04em; color: #fff; }
+    .nav-links { display: flex; gap: 1.75rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
+    .nav-toggle span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: var(--transition); }
+
+    /* ── Hero ── */
+    #hero { position: relative; height: 100vh; min-height: 520px; margin-top: 0; overflow: hidden; background: var(--clr-dark); }
+    #heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(13,13,16,0.25) 0%, rgba(13,13,16,0.08) 70%, transparent 100%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent, var(--clr-surface));
+      pointer-events: none; z-index: 3;
+    }
+    .hero-content {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; color: #fff; z-index: 2; padding: 2rem;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--clr-accent); margin-bottom: 1.25rem;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.6rem, 7vw, 5.5rem); font-weight: 200;
+      letter-spacing: 0.05em; line-height: 1.1;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.5);
+    }
+    .hero-content h1 em { font-style: normal; color: var(--clr-accent); }
+    .hero-sub {
+      margin-top: 1.25rem; font-size: 1rem; color: rgba(255,255,255,0.65);
+      letter-spacing: 0.05em; max-width: 480px;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-top: 2.5rem; padding: 0.7rem 1.8rem;
+      border: 1px solid rgba(255,255,255,0.3); border-radius: 40px;
+      font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #fff; transition: background var(--transition), border-color var(--transition);
+      backdrop-filter: blur(8px); background: rgba(255,255,255,0.06);
+    }
+    .hero-cta:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.5); }
+
+    /* ── Section Shared ── */
+    section { padding: 96px 2rem; }
+    .container { max-width: var(--max-w); margin: 0 auto; }
+    .section-label { display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-accent); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Raleway', var(--font); font-size: clamp(1.6rem,3.5vw,2.3rem); font-weight: 300; letter-spacing: 0.03em; margin-bottom: 1.25rem; text-shadow: 0 2px 8px rgba(0,0,0,0.13); }
+    .divider       { width: 40px; height: 2px; background: var(--clr-accent); margin-bottom: 2rem; }
+    .section-header { margin-bottom: 2.5rem; }
+
+    /* ── About ── */
+    #about { background: var(--clr-surface); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about-image-wrap { aspect-ratio: 3/4; overflow: hidden; border-radius: var(--radius); }
+    .about-text p  { color: var(--clr-muted); margin-bottom: 1.2rem; font-size: 1.05rem; }
+    .about-stats   { display: flex; gap: 2.5rem; margin-top: 2.5rem; }
+    .stat-num      { font-size: 2rem; font-weight: 300; line-height: 1; }
+    .stat-label    { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--clr-muted); margin-top: 4px; }
+    .skill-tags    { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2rem; }
+    .skill-tag {
+      font-size: 0.72rem; letter-spacing: 0.07em; text-transform: uppercase;
+      background: var(--clr-bg); border: 1px solid var(--clr-border);
+      color: var(--clr-muted); border-radius: 20px; padding: 4px 12px;
+    }
+
+    /* ── Canvas Grid (3D Work) ── */
+    #work-3d { background: var(--clr-dark); padding: 96px 2rem; }
+    #work-3d .section-label { color: var(--clr-accent); }
+    #work-3d .section-title { color: #fff; }
+    #work-3d .divider { background: var(--clr-accent); }
+    .canvas-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .canvas-card {
+      position: relative; aspect-ratio: 1; border-radius: var(--radius);
+      overflow: hidden; cursor: pointer; background: var(--clr-dark2);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .canvas-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .canvas-card img    { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .canvas-card video  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    /* shared overlay (canvas cards) */
+    .grid-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(13,13,16,0.58) 0%, transparent 48%);
+      display: flex; align-items: flex-start; padding: 1.1rem;
+      pointer-events: none;
+    }
+    .grid-info { color: #fff; opacity: 1; transform: none; text-shadow: 0 1px 6px rgba(0,0,0,0.75); }
+    .grid-info strong { display: block; font-size: 0.9rem; font-weight: 500; }
+    .grid-info span   { font-size: 0.75rem; opacity: 0.75; }
+    /* Canvas card: scale video/canvas on hover (no overlay darkening) */
+    .canvas-card video, .canvas-card canvas { transition: transform 0.55s ease; }
+    .canvas-card:hover video, .canvas-card:hover canvas { transform: scale(1.05); }
+    /* Photo card: scale only, no brightness darkening */
+    .photo-card img { transition: transform 0.6s ease; }
+    .photo-card:hover img { transform: scale(1.05); }
+
+    /* Clip stack indicator */
+    .clip-badge {
+      position: absolute; bottom: 10px; right: 10px;
+      background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.85); border-radius: 20px;
+      font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 9px; backdrop-filter: blur(4px);
+      display: flex; align-items: center; gap: 4px;
+      pointer-events: none; z-index: 3;
+      opacity: 0.55; transition: opacity 0.3s ease;
+    }
+    .canvas-card:hover .clip-badge { opacity: 1; }
+
+    /* anim label badge */
+    .anim-badge {
+      position: absolute; top: 12px; left: 12px;
+      font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.55); padding: 3px 9px; border-radius: 20px;
+      backdrop-filter: blur(6px);
+    }
+
+    /* ── Digital Art Grid ── */
+    #digital-art { background: var(--clr-bg); }
+    .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .photo-card {
+      position: relative; overflow: hidden; border-radius: var(--radius);
+      cursor: pointer; background: var(--clr-border); aspect-ratio: 3/4;
+    }
+    .photo-card img { transition: transform 0.6s ease, filter 0.4s ease; }
+    .photo-card:hover img { transform: scale(1.05); filter: brightness(0.75); }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(8,8,10,0.95);
+      display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .lightbox.open { display: flex; }
+    .lb-close {
+      position: fixed; top: 18px; right: 22px; background: none; border: none;
+      color: rgba(255,255,255,0.65); font-size: 1.8rem; cursor: pointer; line-height: 1;
+      transition: color var(--transition); z-index: 10;
+    }
+    .lb-close:hover { color: #fff; }
+    .lb-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(6px);
+      color: #fff; cursor: pointer; width: 44px; height: 44px; border-radius: 50%;
+      font-size: 1.4rem; display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition), border-color var(--transition);
+      z-index: 10;
+    }
+    .lb-nav:hover { background: rgba(0,0,0,0.75); border-color: rgba(255,255,255,0.7); }
+    #lbPrev { left: 16px; } #lbNext { right: 16px; }
+    .lb-inner { position: relative; max-width: 900px; width: 100%; }
+    #lbImg   { max-height: 82vh; width: auto; max-width: 100%; margin: 0 auto; border-radius: var(--radius); object-fit: contain; display: none; }
+    #lbVideo { max-height: 82vh; width: auto; max-width: 100%; margin: 0 auto; border-radius: var(--radius); object-fit: contain; display: none; background: #000; }
+    #lbCanvas { display: none; border-radius: var(--radius); background: var(--clr-dark2); border: 1px solid rgba(255,255,255,0.06); }
+    .lb-caption { text-align: center; color: rgba(255,255,255,0.5); margin-top: 14px; font-size: 0.82rem; letter-spacing: 0.06em; }
+    .lb-counter { text-align: center; color: rgba(255,255,255,0.3); margin-top: 6px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; min-height: 1em; }
+    .lb-placeholder { width: 100%; aspect-ratio: 16/9; max-width: 860px; margin: 0 auto; background: #13131a; border: 1px dashed rgba(255,255,255,0.12); border-radius: var(--radius); display: none; align-items: center; justify-content: center; color: rgba(255,255,255,0.25); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+    /* ── Contact ── */
+    #contact { background: var(--clr-surface); }
+    .contact-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: start; }
+    .contact-info p { color: var(--clr-muted); font-size: 1rem; margin-bottom: 2rem; }
+    .contact-detail { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; color: var(--clr-muted); font-size: 0.9rem; }
+    .contact-detail svg { flex-shrink: 0; color: var(--clr-accent); }
+    form { display: flex; flex-direction: column; gap: 15px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    label { display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--clr-muted); }
+    input, textarea, select {
+      font-family: var(--font); font-size: 0.95rem; color: var(--clr-text);
+      background: var(--clr-bg); border: 1px solid var(--clr-border);
+      border-radius: var(--radius); padding: 0.65rem 0.875rem; outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--clr-accent); box-shadow: 0 0 0 3px rgba(181,169,154,0.18); }
+    textarea { resize: vertical; min-height: 110px; }
+    .btn-submit {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 0.75rem 2rem; background: var(--clr-text); color: #fff;
+      border: none; border-radius: var(--radius); font-family: var(--font);
+      font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; align-self: flex-start; transition: background var(--transition), transform var(--transition);
+    }
+    .btn-submit:hover { background: #333; transform: translateY(-1px); }
+    .form-msg { font-size: 0.875rem; padding: 0.65rem 0.875rem; border-radius: var(--radius); display: none; }
+    .form-msg.success { background: #edf7ed; color: #2d6a2d; display: block; }
+    .form-msg.error   { background: #fdecea; color: #842029; display: block; }
+
+    /* ── Footer ── */
+    footer { background: var(--clr-dark); text-align: center; padding: 2.5rem 2rem; color: rgba(255,255,255,0.28); font-size: 0.78rem; letter-spacing: 0.08em; }
+
+    /* ── Scroll Reveal ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .canvas-grid { grid-template-columns: repeat(2, 1fr); }
+      .photo-grid  { grid-template-columns: repeat(2, 1fr); }
+      .about-grid  { grid-template-columns: 1fr; gap: 32px; }
+      .about-image-wrap { max-width: 400px; aspect-ratio: 4/3; }
+      .contact-layout { grid-template-columns: 1fr; gap: 36px; }
+    }
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none; flex-direction: column;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--clr-dark); border-bottom: 1px solid rgba(255,255,255,0.07);
+        padding: 1.5rem 2rem; gap: 1.25rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: flex; }
+    }
+    @media (max-width: 580px) {
+      .canvas-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .photo-grid  { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .form-row    { grid-template-columns: 1fr; }
+      .about-stats { gap: 1.5rem; }
+      .lb-nav      { width: 38px; height: 38px; font-size: 1.2rem; }
+      #lbPrev { left: 8px; } #lbNext { right: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <a href="#hero" class="nav-logo">Ian Kehayes</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#work-3d">3D Work</a></li>
+      <li><a href="#design">Design</a></li>
+      <li><a href="#digital-illustration">Illustration</a></li>
+      <li><a href="#photography">Photography</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>Light. <em>Render.</em> Composite.</h1>
+      <p class="hero-sub">Crafting immersive 3D experiences, bespoke designs, and digital illustrations.</p>
+      <a href="#work-3d" class="hero-cta">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        View My Work
+      </a>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="container">
+      <div class="reveal" style="text-align:center; max-width:640px; margin:0 auto;">
+        <div class="about-text">
+          <span class="section-label">About me</span>
+          <div class="divider" style="margin:0.75rem auto 1.5rem;"></div>
+          <p>I'm Ian Kehayes, a 3D Lighting Artist and Compositor with over a decade of experience building worlds from vertices and light. From child focussed 3D animation, to live action, I approach every project with the same goal: to make the viewer feel something they can't quite explain.</p>
+          <p>I am proficient in several softwares and disciplines that I have picked up over the years.</p>
+          <div class="skill-tags" style="justify-content:center;">
+            <span class="skill-tag">Maya</span>
+            <span class="skill-tag">Nuke</span>
+            <span class="skill-tag">DaVinci Resolve</span>
+            <span class="skill-tag">Fusion</span>
+            <span class="skill-tag">Affinity Suite</span>
+            <span class="skill-tag">Photoshop</span>
+            <span class="skill-tag">After Effects</span>
+            <span class="skill-tag">Procreate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3D WORK GRID ── -->
+  <section id="work-3d">
+    <div class="container">
+
+      <div class="section-header reveal" style="text-align:center; margin-bottom:3rem;">
+        <h2 class="section-title" style="color:#fff; text-decoration:underline; text-decoration-color:var(--clr-accent); text-underline-offset:10px; letter-spacing:0.08em;">Work</h2>
+      </div>
+
+      <div class="section-header reveal" style="text-align:center;">
+        <h2 class="section-title" style="color:#fff">Lighting</h2>
+        <div class="divider" style="margin:0 auto 2rem;"></div>
+      </div>
+      <div class="canvas-grid reveal" id="lightingGrid">
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0001.mp4","caption":"Unicorn Academy — Clip 1"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0002.mp4","caption":"Unicorn Academy — Clip 2"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0003.mp4","caption":"Unicorn Academy — Clip 3"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0004.mp4","caption":"Unicorn Academy — Clip 4"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0005.mp4","caption":"Unicorn Academy — Clip 5"}]'>
+          <video src="images/lighting/unicorn-academy/Portfolio Shot00_V1-0001.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Unicorn Academy</strong><span>Lighting</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/lighting/little-people/Portfolio Shot00_V1-0016.mp4","caption":"Little People — Clip 1"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0017.mp4","caption":"Little People — Clip 2"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0018.mp4","caption":"Little People — Clip 3"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0019.mp4","caption":"Little People — Clip 4"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0020.mp4","caption":"Little People — Clip 5"}]'>
+          <video src="images/lighting/little-people/Portfolio Shot00_V1-0016.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Little People</strong><span>Lighting</span></div></div>
+        </div>
+
+        <div class="canvas-card" data-anim="terrain"
+             data-slides='[{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0030.mp4","caption":"Space Ranger Roger — Clip 3"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0009.mp4","caption":"Space Ranger Roger — Clip 1"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0010.mp4","caption":"Space Ranger Roger — Clip 2"}]'>
+          <canvas data-anim="terrain"></canvas>
+          <video src="images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0030.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Space Ranger Roger</strong><span>Lighting &amp; Compositing</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/lighting/weather-hunters/Compound Clip 44_00_V1-0043.mp4","caption":"Weather Hunters — Clip 2"},{"src":"images/lighting/weather-hunters/Compound Clip 43_00_V1-0042.mp4","caption":"Weather Hunters — Clip 1"},{"src":"images/lighting/weather-hunters/Compound Clip 45_00_V1-0044.mp4","caption":"Weather Hunters — Clip 3"},{"src":"images/lighting/weather-hunters/Compound Clip 46_00_V1-0045.mp4","caption":"Weather Hunters — Clip 4"}]'>
+          <video src="images/lighting/weather-hunters/Compound Clip 44_00_V1-0043.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Weather Hunters</strong><span>Lighting</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/lighting/bob-the-builder/Compound Clip 31_00_V1-0031.mp4","caption":"Bob the Builder — Clip 1"},{"src":"images/lighting/bob-the-builder/Compound Clip 32_00_V1-0032.mp4","caption":"Bob the Builder — Clip 2"},{"src":"images/lighting/bob-the-builder/Compound Clip 33_00_V1-0033.mp4","caption":"Bob the Builder — Clip 3"},{"src":"images/lighting/bob-the-builder/Compound Clip 35_00_V1-0034.mp4","caption":"Bob the Builder — Clip 4"}]'>
+          <video src="images/lighting/bob-the-builder/Compound Clip 31_00_V1-0031.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Bob the Builder</strong><span>Lighting</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/lighting/fireman-sam/Compound Clip 41_00_V1-0040.mp4","caption":"Fireman Sam — Clip 2"},{"src":"images/lighting/fireman-sam/Compound Clip 40_00_V1-0039.mp4","caption":"Fireman Sam — Clip 1"},{"src":"images/lighting/fireman-sam/Compound Clip 42_00_V1-0041.mp4","caption":"Fireman Sam — Clip 3"}]'>
+          <video src="images/lighting/fireman-sam/Compound Clip 41_00_V1-0040.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Fireman Sam</strong><span>Lighting</span></div></div>
+        </div>
+
+      </div>
+
+      <div class="section-header reveal" style="margin-top: 4rem; text-align:center;">
+        <h2 class="section-title" style="color:#fff">Compositing</h2>
+        <div class="divider" style="margin:0 auto 2rem;"></div>
+      </div>
+      <div class="canvas-grid reveal" id="compositingGrid">
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0006.mp4","caption":"Charlie&apos;s Colorforms City — Clip 1"},{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0007.mp4","caption":"Charlie&apos;s Colorforms City — Clip 2"},{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0008.mp4","caption":"Charlie&apos;s Colorforms City — Clip 3"}]'>
+          <video src="images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0006.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Charlie's Colorforms City</strong><span>Compositing</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/compositing/inspector-gadget/Portfolio Shot00_V1-0027.mp4","caption":"Inspector Gadget — Clip 1"},{"src":"images/compositing/inspector-gadget/Portfolio Shot00_V1-0028.mp4","caption":"Inspector Gadget — Clip 2"},{"src":"images/compositing/inspector-gadget/Portfolio Shot00_V1-0029.mp4","caption":"Inspector Gadget — Clip 3"}]'>
+          <video src="images/compositing/inspector-gadget/Portfolio Shot00_V1-0027.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Inspector Gadget</strong><span>Compositing</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0014.mp4","caption":"Wishenpoof — Clip 4"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0011.mp4","caption":"Wishenpoof — Clip 1"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0012.mp4","caption":"Wishenpoof — Clip 2"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0013.mp4","caption":"Wishenpoof — Clip 3"}]'>
+          <video src="images/vfx/wishenpoof/Portfolio Shot00_V1-0014.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Wishenpoof</strong><span>Compositing</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/compositing/caillou/Compound Clip 39_00_V1-0038.mp4","caption":"Caillou — Clip 4"},{"src":"images/compositing/caillou/Compound Clip 36_00_V1-0035.mp4","caption":"Caillou — Clip 1"},{"src":"images/compositing/caillou/Compound Clip 37_00_V1-0036.mp4","caption":"Caillou — Clip 2"},{"src":"images/compositing/caillou/Compound Clip 38_00_V1-0037.mp4","caption":"Caillou — Clip 3"}]'>
+          <video src="images/compositing/caillou/Compound Clip 39_00_V1-0038.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Caillou</strong><span>Compositing</span></div></div>
+        </div>
+
+      </div>
+
+      <div class="section-header reveal" style="margin-top: 4rem; text-align:center;">
+        <h2 class="section-title" style="color:#fff">VFX</h2>
+        <div class="divider" style="margin:0 auto 2rem;"></div>
+      </div>
+      <div class="canvas-grid reveal" id="vfxGrid">
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0011.mp4","caption":"Wishenpoof — Clip 1"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0012.mp4","caption":"Wishenpoof — Clip 2"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0013.mp4","caption":"Wishenpoof — Clip 3"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0014.mp4","caption":"Wishenpoof — Clip 4"}]'>
+          <video src="images/vfx/wishenpoof/Portfolio Shot00_V1-0011.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Wishenpoof</strong><span>VFX &amp; Compositing</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0006.mp4","caption":"Charlie&apos;s Colorforms City — Clip 1"},{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0007.mp4","caption":"Charlie&apos;s Colorforms City — Clip 2"},{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0008.mp4","caption":"Charlie&apos;s Colorforms City — Clip 3"}]'>
+          <video src="images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0007.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Charlie's Colorforms City</strong><span>VFX</span></div></div>
+        </div>
+
+        <div class="canvas-card" data-anim="sphere"
+             data-slides='[{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0009.mp4","caption":"Space Ranger Roger — Clip 1"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0010.mp4","caption":"Space Ranger Roger — Clip 2"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0030.mp4","caption":"Space Ranger Roger — Clip 3"}]'>
+          <canvas data-anim="sphere"></canvas>
+          <video src="images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0009.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>Space Ranger Roger</strong><span>VFX</span></div></div>
+        </div>
+
+        <div class="canvas-card"
+             data-slides='[{"src":"images/vfx/college-work/Portfolio Shot00_V1-0021.mp4","caption":"College Work — Clip 1"},{"src":"images/vfx/college-work/Portfolio Shot00_V1-0022.mp4","caption":"College Work — Clip 2"},{"src":"images/vfx/college-work/Portfolio Shot00_V1-0023.mp4","caption":"College Work — Clip 3"},{"src":"images/vfx/college-work/Portfolio Shot00_V1-0024.mp4","caption":"College Work — Clip 4"},{"src":"images/vfx/college-work/Portfolio Shot00_V1-0025.mp4","caption":"College Work — Clip 5"},{"src":"images/vfx/college-work/Portfolio Shot00_V1-0026.mp4","caption":"College Work — Clip 6"}]'>
+          <video src="images/vfx/college-work/Portfolio Shot00_V1-0021.mp4" preload="none" autoplay loop muted playsinline></video>
+          <div class="grid-overlay"><div class="grid-info"><strong>College Work</strong><span>VFX</span></div></div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:2.5rem;" class="reveal">
+        <a href="projects.html" style="
+          display: inline-block;
+          font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+          border: 1px solid rgba(255,255,255,0.35); color: rgba(255,255,255,0.75);
+          padding: 0.7rem 1.75rem; border-radius: 40px;
+          transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        " onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.7)'"
+           onmouseout="this.style.background='';this.style.color='rgba(255,255,255,0.75)';this.style.borderColor='rgba(255,255,255,0.35)'">
+          View more on the Projects page &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DESIGN GRID ── -->
+  <section id="design">
+    <div class="container">
+      <div class="section-header reveal" style="text-align:center;">
+        <h2 class="section-title">Design</h2>
+        <div class="divider" style="margin:0 auto 2rem;"></div>
+      </div>
+      <div class="photo-grid reveal" id="digitalGrid">
+
+        <div class="photo-card" data-gallery="digital" data-index="0"
+             data-src="images/design/6BF6CE44-43C6-4FB9-B802-F1D74440CC37_1_105_c.jpeg"
+             data-caption="">
+          <img src="images/design/6BF6CE44-43C6-4FB9-B802-F1D74440CC37_1_105_c.jpeg" alt="Design 1" loading="lazy" />
+        </div>
+
+        <div class="photo-card" data-gallery="digital" data-index="1"
+             data-src="images/design/Aurora_logo_colour Sign 25x36.png"
+             data-caption="">
+          <img src="images/design/Aurora_logo_colour Sign 25x36.png" alt="Aurora Logo" loading="lazy" style="object-fit: contain;" />
+        </div>
+
+        <div class="photo-card" data-gallery="digital" data-index="2"
+             data-src="images/design/Red Gem.jpg"
+             data-caption="">
+          <img src="images/design/Red Gem.jpg" alt="Design 3" loading="lazy" />
+        </div>
+
+        <div class="photo-card" data-gallery="digital" data-index="3"
+             data-src="images/design/IMG_6578.jpeg"
+             data-caption="">
+          <img src="images/design/IMG_6578.jpeg" alt="Samson" loading="lazy" style="object-fit: contain;" />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DIGITAL ILLUSTRATION GRID ── -->
+  <section id="digital-illustration" style="background: var(--clr-dark);">
+    <div class="container">
+      <div class="section-header reveal" style="text-align:center;">
+        <h2 class="section-title" style="color:#fff">Digital Illustration</h2>
+        <div class="divider" style="margin:0 auto 2rem;"></div>
+      </div>
+      <div class="photo-grid reveal" id="illustrationGrid">
+
+        <div class="photo-card" data-gallery="illustration" data-index="0"
+             data-src="images/illustration/05F58A92-85F7-4200-9154-FDEBE01BEB0F_1_105_c.jpeg"
+             data-caption="">
+          <img src="images/illustration/05F58A92-85F7-4200-9154-FDEBE01BEB0F_1_105_c.jpeg" alt="Illustration 1" loading="lazy" />
+        </div>
+
+        <div class="photo-card" data-gallery="illustration" data-index="1"
+             data-src="images/illustration/3786F9E7-87BB-4EFD-A884-AF18A5EBBAE5_1_105_c.jpeg"
+             data-caption="">
+          <img src="images/illustration/3786F9E7-87BB-4EFD-A884-AF18A5EBBAE5_1_105_c.jpeg" alt="Illustration 2" loading="lazy" />
+        </div>
+
+        <div class="photo-card" data-gallery="illustration" data-index="2"
+             data-src="images/illustration/39EFED5E-D994-47D9-9AEA-B7828C86CA34_1_105_c.jpeg"
+             data-caption="">
+          <img src="images/illustration/39EFED5E-D994-47D9-9AEA-B7828C86CA34_1_105_c.jpeg" alt="Illustration 3" loading="lazy" />
+        </div>
+
+        <div class="photo-card" data-gallery="illustration" data-index="3"
+             data-src="images/illustration/39FA9AF8-B32E-4C97-B927-9E43DA08C07E_1_105_c.jpeg"
+             data-caption="">
+          <img src="images/illustration/39FA9AF8-B32E-4C97-B927-9E43DA08C07E_1_105_c.jpeg" alt="Illustration 4" loading="lazy" />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PHOTOGRAPHY ── -->
+  <section id="photography">
+    <div class="container" style="text-align: center;">
+      <div class="reveal">
+        <span class="section-label">External Portfolio</span>
+        <h2 class="section-title" style="margin-top: 0.5rem;">Photography</h2>
+        <div class="divider" style="margin: 0 auto 2rem;"></div>
+        <p style="color: var(--clr-muted); max-width: 480px; margin: 0 auto 2.5rem; font-size: 1rem;">My photography work lives at <strong>Harbour Hues Media</strong>. Visit the link below to explore.</p>
+        <a href="https://harbourhues.ca" target="_blank" rel="noopener noreferrer" style="
+          display: inline-flex; align-items: center; gap: 10px;
+          padding: 0.7rem 1.8rem; border: 1px solid var(--clr-border);
+          border-radius: 40px; font-size: 0.8rem; letter-spacing: 0.1em;
+          text-transform: uppercase; color: var(--clr-text);
+          transition: border-color 0.3s ease, color 0.3s ease;
+          text-decoration: none;">
+          Visit Harbour Hues Media &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-info reveal" style="text-align:center;">
+          <span class="section-label">Get in touch</span>
+          <h2 class="section-title">Let's build something extraordinary</h2>
+          <div class="divider" style="margin:0 auto 2rem;"></div>
+          <div class="contact-detail" style="justify-content:center;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>iankehayes@gmail.com</span>
+          </div>
+          <div class="contact-detail" style="justify-content:center;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>Halifax, NS, Canada / Remote</span>
+          </div>
+          <div class="contact-detail" style="justify-content:center;">
+            <a href="https://www.linkedin.com/in/ian-kehayes-2976646b/" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:10px;color:#0a66c2;text-decoration:underline;text-underline-offset:3px;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="3" ry="3"/><path d="M7 10v7M7 7v.01M12 17v-4a2 2 0 014 0v4M12 10v7"/></svg>
+              <span>LinkedIn</span>
+            </a>
+          </div>
+        </div>
+        <div class="reveal">
+          <form id="contactForm" action="https://formspree.io/f/mpqjgejv" method="POST">
+            <div class="form-row">
+              <label>First name<input type="text" name="firstName" placeholder="…" autocomplete="given-name" required /></label>
+              <label>Last name<input type="text" name="lastName" placeholder="…" autocomplete="family-name" required /></label>
+            </div>
+            <label>Email<input type="email" name="email" placeholder="…" autocomplete="email" required /></label>
+            <label>
+              Project type
+              <select name="project">
+                <option value="">Select a type…</option>
+                <option value="3d-render">3D Visualisation / Render</option>
+                <option value="design">Design</option>
+                <option value="illustration">Digital Illustration</option>
+                <option value="photography">Photography</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label>Message<textarea name="message" placeholder="Tell me about your project, timeline, and budget…" required></textarea></label>
+            <div class="form-msg" id="formMsg"></div>
+            <button type="submit" class="btn-submit">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LIGHTBOX ── -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <button class="lb-close" id="lbClose">&#x2715;</button>
+    <button class="lb-nav" id="lbPrev">&#8249;</button>
+    <div class="lb-inner">
+      <img id="lbImg" src="" alt="" />
+      <video id="lbVideo" preload="none" autoplay loop muted playsinline></video>
+      <canvas id="lbCanvas" width="860" height="860"></canvas>
+      <div class="lb-placeholder" id="lbPlaceholder">No image — add a src path to data-slides</div>
+      <div class="lb-caption" id="lbCaption"></div>
+      <div class="lb-counter" id="lbCounter"></div>
+    </div>
+    <button class="lb-nav" id="lbNext">&#8250;</button>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer><p>&copy; <span id="footerYear"></span> Ian Kehayes — All rights reserved</p></footer>
+
+  <script>
+  /* ── Dynamic footer year ── */
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  /* ════════════════════════════════════════
+     UTILITY
+  ════════════════════════════════════════ */
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+  function fitCanvas(canvas) {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const w = Math.round(rect.width  * DPR);
+    const h = Math.round(rect.height * DPR);
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(DPR, DPR);
+    return ctx;
+  }
+
+  // 3D rotation helpers
+  function ry(x,y,z,a){ return [x*Math.cos(a)-z*Math.sin(a), y, x*Math.sin(a)+z*Math.cos(a)]; }
+  function rx(x,y,z,a){ return [x, y*Math.cos(a)-z*Math.sin(a), y*Math.sin(a)+z*Math.cos(a)]; }
+  function perspective(x,y,z,fov,cx,cy,scale){
+    const s = fov/(fov+z);
+    return { x: cx+x*s*scale, y: cy+y*s*scale, z, s };
+  }
+
+  /* ════════════════════════════════════════
+     HERO CANVAS — Constellation / Neural Net
+  ════════════════════════════════════════ */
+  (function heroAnim() {
+    const canvas = document.getElementById('heroCanvas');
+    function resize() { canvas.width = canvas.offsetWidth * DPR; canvas.height = canvas.offsetHeight * DPR; }
+    window.addEventListener('resize', resize); resize();
+    const ctx = canvas.getContext('2d');
+    const N = 90;
+    const pts = Array.from({length: N}, () => ({
+      x: Math.random(), y: Math.random(),
+      vx: (Math.random()-0.5)*0.0003, vy: (Math.random()-0.5)*0.0003
+    }));
+    function draw() {
+      const W = canvas.width/DPR, H = canvas.height/DPR;
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = '#0d0d10';
+      ctx.fillRect(0,0,W,H);
+      pts.forEach(p => { p.x += p.vx; p.y += p.vy; if(p.x<0||p.x>1) p.vx*=-1; if(p.y<0||p.y>1) p.vy*=-1; });
+      const LINK = 0.14;
+      for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+        const dx=(pts[i].x-pts[j].x), dy=(pts[i].y-pts[j].y);
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<LINK){
+          ctx.strokeStyle=`rgba(181,169,154,${(1-d/LINK)*0.22})`;
+          ctx.lineWidth=0.5;
+          ctx.beginPath(); ctx.moveTo(pts[i].x*W,pts[i].y*H); ctx.lineTo(pts[j].x*W,pts[j].y*H); ctx.stroke();
+        }
+      }
+      pts.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x*W,p.y*H,1.5,0,Math.PI*2);
+        ctx.fillStyle='rgba(181,169,154,0.55)'; ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  /* ════════════════════════════════════════
+     CANVAS ANIMATION LIBRARY
+  ════════════════════════════════════════ */
+  const animFns = {
+
+    /* ── Wireframe Cube ── */
+    cube(canvas, ctx, isLb) {
+      const V = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
+      const E = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+      let ay=0, ax=0.4; let id;
+      function draw() {
+        const W=canvas.width/DPR, H=canvas.height/DPR;
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+        ctx.clearRect(0,0,W,H);
+        const size=Math.min(W,H)*0.28, fov=4;
+        const proj = V.map(([x,y,z])=>{
+          [x,y,z]=ry(x,y,z,ay); [x,y,z]=rx(x,y,z,ax);
+          return perspective(x,y,z,fov,W/2,H/2,size);
+        });
+        E.forEach(([a,b])=>{
+          const depth=(proj[a].z+proj[b].z)/2;
+          const alpha=0.5+depth*0.18;
+          ctx.strokeStyle=`rgba(181,169,154,${Math.min(0.95,Math.max(0.2,alpha))})`;
+          ctx.lineWidth=isLb?1.5:1;
+          ctx.beginPath(); ctx.moveTo(proj[a].x,proj[a].y); ctx.lineTo(proj[b].x,proj[b].y); ctx.stroke();
+        });
+        proj.forEach(p=>{
+          const r=Math.max(1,(p.s*2+(isLb?3:2)));
+          ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2);
+          ctx.fillStyle='rgba(255,255,255,0.9)'; ctx.fill();
+        });
+        ay+=0.007; id=requestAnimationFrame(draw);
+      }
+      draw(); return ()=>cancelAnimationFrame(id);
+    },
+
+    /* ── Particle Sphere ── */
+    sphere(canvas, ctx, isLb) {
+      const N=isLb?220:120;
+      const pts=[];
+      for(let i=0;i<N;i++){
+        const phi=Math.acos(1-2*(i+0.5)/N), th=Math.PI*(1+Math.sqrt(5))*i;
+        pts.push([Math.sin(phi)*Math.cos(th), Math.cos(phi), Math.sin(phi)*Math.sin(th)]);
+      }
+      let ay=0, ax=0.25; let id;
+      function draw(){
+        const W=canvas.width/DPR, H=canvas.height/DPR;
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+        ctx.clearRect(0,0,W,H);
+        const size=Math.min(W,H)*0.34, fov=4.5;
+        const proj=pts.map(([x,y,z])=>{
+          [x,y,z]=ry(x,y,z,ay); [x,y,z]=rx(x,y,z,ax);
+          return perspective(x,y,z,fov,W/2,H/2,size);
+        }).sort((a,b)=>a.z-b.z);
+        proj.forEach(p=>{
+          const t=(p.z+1)/2;
+          const r=Math.max(0.5,t*2.5+(isLb?1.5:1));
+          ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2);
+          ctx.fillStyle=`rgba(${80+Math.round(t*80)},${150+Math.round(t*50)},220,${0.3+t*0.65})`;
+          ctx.fill();
+        });
+        ay+=0.005; id=requestAnimationFrame(draw);
+      }
+      draw(); return ()=>cancelAnimationFrame(id);
+    },
+
+    /* ── Torus Wireframe ── */
+    torus(canvas, ctx, isLb) {
+      const R=0.6, r=0.28, NS=isLb?30:18, NT=isLb?30:18;
+      const V=[];
+      for(let i=0;i<NT;i++) for(let j=0;j<NS;j++){
+        const u=2*Math.PI*i/NT, v=2*Math.PI*j/NS;
+        V.push([(R+r*Math.cos(v))*Math.cos(u),(R+r*Math.cos(v))*Math.sin(u),r*Math.sin(v)]);
+      }
+      let ay=0, ax=0.5; let id;
+      function draw(){
+        const W=canvas.width/DPR, H=canvas.height/DPR;
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+        ctx.clearRect(0,0,W,H);
+        const size=Math.min(W,H)*0.36, fov=4;
+        const proj=V.map(([x,y,z])=>{
+          [x,y,z]=ry(x,y,z,ay); [x,y,z]=rx(x,y,z,ax);
+          return perspective(x,y,z,fov,W/2,H/2,size);
+        });
+        ctx.lineWidth=0.7;
+        for(let i=0;i<NT;i++) for(let j=0;j<NS;j++){
+          const a=i*NS+j, b=i*NS+(j+1)%NS, c=((i+1)%NT)*NS+j;
+          const drawEdge=(p1,p2)=>{
+            const depth=(p1.z+p2.z)/2, alpha=0.2+(depth+1)*0.3;
+            ctx.strokeStyle=`rgba(180,120,220,${Math.min(0.9,Math.max(0.1,alpha))})`;
+            ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+          };
+          drawEdge(proj[a],proj[b]); drawEdge(proj[a],proj[c]);
+        }
+        ay+=0.006; id=requestAnimationFrame(draw);
+      }
+      draw(); return ()=>cancelAnimationFrame(id);
+    },
+
+    /* ── Wave Terrain ── */
+    terrain(canvas, ctx, isLb) {
+      const G=isLb?22:14; let t=0; let id;
+      function draw(){
+        const W=canvas.width/DPR, H=canvas.height/DPR;
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+        ctx.clearRect(0,0,W,H);
+        const size=Math.min(W,H)*0.38;
+        const grid=[];
+        for(let i=0;i<=G;i++) for(let j=0;j<=G;j++){
+          const gx=(i/G-0.5)*2, gy=(j/G-0.5)*2;
+          const gz=Math.sin(gx*2.8+t)*0.35+Math.cos(gy*2.4+t*0.7)*0.25;
+          let [x,y,z]=ry(gx,gz,gy,0.4);
+          [x,y,z]=rx(x,y,z,0.52);
+          const p=perspective(x,y,z,4.2,W/2,H/2,size);
+          grid.push(p);
+        }
+        const row=G+1;
+        for(let i=0;i<G;i++) for(let j=0;j<G;j++){
+          const tl=grid[i*row+j], tr=grid[i*row+j+1], bl=grid[(i+1)*row+j];
+          const depth=(tl.z+tr.z+bl.z)/3, alpha=0.15+(depth+1)*0.32;
+          ctx.strokeStyle=`rgba(80,200,160,${Math.min(0.9,Math.max(0.08,alpha))})`;
+          ctx.lineWidth=0.8;
+          ctx.beginPath(); ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(tl.x,tl.y); ctx.lineTo(bl.x,bl.y); ctx.stroke();
+        }
+        t+=0.018; id=requestAnimationFrame(draw);
+      }
+      draw(); return ()=>cancelAnimationFrame(id);
+    },
+
+    /* ── Double Helix ── */
+    helix(canvas, ctx, isLb) {
+      const N=isLb?60:38; let t=0; let id;
+      function draw(){
+        const W=canvas.width/DPR, H=canvas.height/DPR;
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+        ctx.clearRect(0,0,W,H);
+        const size=Math.min(W,H)*0.34, fov=4.5;
+        const strand1=[], strand2=[];
+        for(let i=0;i<N;i++){
+          const angle=2*Math.PI*i/(N/4)+t;
+          const yPos=(i/N-0.5)*2;
+          const r=0.5;
+          let [x,y,z]=ry(r*Math.cos(angle), yPos, r*Math.sin(angle), t*0.3);
+          strand1.push(perspective(x,y,z,fov,W/2,H/2,size));
+          let [x2,y2,z2]=ry(r*Math.cos(angle+Math.PI), yPos, r*Math.sin(angle+Math.PI), t*0.3);
+          strand2.push(perspective(x2,y2,z2,fov,W/2,H/2,size));
+        }
+        // draw rungs
+        for(let i=0;i<N;i+=3){
+          const p1=strand1[i], p2=strand2[i];
+          ctx.strokeStyle='rgba(220,180,80,0.22)'; ctx.lineWidth=0.8;
+          ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+        }
+        // draw strands
+        [strand1,strand2].forEach((strand,si)=>{
+          for(let i=0;i<strand.length-1;i++){
+            const p=strand[i], q=strand[i+1];
+            const depth=(p.z+q.z)/2, alpha=0.25+(depth+1)*0.35;
+            ctx.strokeStyle=si===0?`rgba(220,180,80,${Math.min(0.95,alpha)})`:`rgba(255,140,100,${Math.min(0.95,alpha)})`;
+            ctx.lineWidth=isLb?2:1.5;
+            ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
+          }
+        });
+        // dots
+        [...strand1,...strand2].forEach(p=>{
+          ctx.beginPath(); ctx.arc(p.x,p.y,(p.s+0.5)*(isLb?2.5:1.8),0,Math.PI*2);
+          ctx.fillStyle='rgba(255,220,120,0.85)'; ctx.fill();
+        });
+        t+=0.012; id=requestAnimationFrame(draw);
+      }
+      draw(); return ()=>cancelAnimationFrame(id);
+    },
+
+    /* ── Galaxy Spiral ── */
+    galaxy(canvas, ctx, isLb) {
+      const N=isLb?500:280;
+      const pts=Array.from({length:N},(_,i)=>{
+        const arm=Math.floor(Math.random()*3);
+        const d=0.1+Math.random()*0.85;
+        const spread=(1-d)*0.45;
+        const angle=arm*(2*Math.PI/3)+d*3.5+(Math.random()-0.5)*spread*2;
+        return {
+          x:d*Math.cos(angle)+(Math.random()-0.5)*spread,
+          y:(Math.random()-0.5)*0.12,
+          z:d*Math.sin(angle)+(Math.random()-0.5)*spread,
+          r:Math.random(),
+          bright:Math.random()
+        };
+      });
+      let ay=0; let id;
+      function draw(){
+        const W=canvas.width/DPR, H=canvas.height/DPR;
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+        ctx.clearRect(0,0,W,H);
+        const size=Math.min(W,H)*0.42, fov=5;
+        const proj=pts.map(p=>{
+          let [x,y,z]=ry(p.x,p.y,p.z,ay);
+          [x,y,z]=rx(x,y,z,0.35);
+          return {...perspective(x,y,z,fov,W/2,H/2,size), r:p.r, bright:p.bright};
+        }).sort((a,b)=>a.z-b.z);
+        proj.forEach(p=>{
+          const t=(p.z+1)/2;
+          const rad=Math.max(0.4,p.r*2.2*p.s*(isLb?1.5:1));
+          const hue=200+p.bright*60;
+          ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,Math.PI*2);
+          ctx.fillStyle=`hsla(${hue},80%,${60+p.bright*35}%,${0.2+t*0.75})`;
+          ctx.fill();
+        });
+        ay+=0.004; id=requestAnimationFrame(draw);
+      }
+      draw(); return ()=>cancelAnimationFrame(id);
+    }
+  };
+
+  /* ════════════════════════════════════════
+     INIT GRID CANVASES with IntersectionObserver
+  ════════════════════════════════════════ */
+  const activeAnims = new Map();
+
+  function startCanvasAnim(canvas, isLb=false) {
+    if (activeAnims.has(canvas)) { activeAnims.get(canvas)(); activeAnims.delete(canvas); }
+    const type = canvas.dataset.anim;
+    if (!animFns[type]) return;
+    const ctx = fitCanvas(canvas);
+    const cancel = animFns[type](canvas, ctx, isLb);
+    activeAnims.set(canvas, cancel);
+  }
+
+  const cardObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const canvas = e.target.querySelector('canvas[data-anim]');
+      if (!canvas) return;
+      if (e.isIntersecting) startCanvasAnim(canvas);
+      else if (activeAnims.has(canvas)) { activeAnims.get(canvas)(); activeAnims.delete(canvas); }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.canvas-card').forEach(card => cardObs.observe(card));
+
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.canvas-card canvas[data-anim]').forEach(canvas => {
+      if (activeAnims.has(canvas)) startCanvasAnim(canvas);
+    });
+  });
+
+  /* ════════════════════════════════════════
+     LIGHTBOX — folder mode (canvas-cards) + gallery mode (photo-cards)
+  ════════════════════════════════════════ */
+  const lightbox    = document.getElementById('lightbox');
+  const lbImg       = document.getElementById('lbImg');
+  const lbVid       = document.getElementById('lbVideo');
+  const lbCvs       = document.getElementById('lbCanvas');
+  const lbCap       = document.getElementById('lbCaption');
+  const lbCounter   = document.getElementById('lbCounter');
+  const lbPlaceholder = document.getElementById('lbPlaceholder');
+  const lbPrevBtn   = document.getElementById('lbPrev');
+  const lbNextBtn   = document.getElementById('lbNext');
+
+  // Gallery data for photo-cards (Design / Illustration)
+  const galleries = {};
+  let lbGallery='', lbIndex=0, lbAnimCancel=null;
+  document.querySelectorAll('.photo-card[data-gallery]').forEach(card => {
+    const g = card.dataset.gallery;
+    if (!galleries[g]) galleries[g] = [];
+    galleries[g].push({ type:'image', src:card.dataset.src, caption:card.dataset.caption });
+  });
+
+  // Folder/slide state for canvas-cards
+  let lbSlides=[], lbSlideIndex=0, lbMode='gallery';
+
+  function lbTeardown() {
+    lbImg.style.display='none'; lbImg.src='';
+    lbVid.style.display='none'; lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load();
+    lbCvs.style.display='none';
+    lbPlaceholder.style.display='none';
+    if (lbAnimCancel) { lbAnimCancel(); lbAnimCancel=null; }
+  }
+
+  function setNavVisibility(count) {
+    const v = count > 1 ? 'visible' : 'hidden';
+    lbPrevBtn.style.visibility = v;
+    lbNextBtn.style.visibility = v;
+  }
+
+  function isVideo(src) { return /\.(mp4|webm|ogg|mov)$/i.test(src); }
+
+  // ── Folder mode (canvas-cards) ──
+  function showSlide(index) {
+    lbTeardown();
+    const slide = lbSlides[index];
+    lbCap.textContent = slide.caption || '';
+    lbCounter.textContent = lbSlides.length > 1 ? (index + 1) + ' / ' + lbSlides.length : '';
+    setNavVisibility(lbSlides.length);
+    if (slide.src) {
+      if (isVideo(slide.src)) {
+        lbVid.src = slide.src; lbVid.style.display = 'block'; lbVid.play();
+      } else {
+        lbImg.src = slide.src; lbImg.style.display = 'block';
+      }
+    } else {
+      lbPlaceholder.style.display = 'flex';
+    }
+  }
+
+  function openFolderLightbox(card) {
+    lbMode = 'folder';
+    lbSlides = JSON.parse(card.dataset.slides || '[]');
+    lbSlideIndex = 0;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    showSlide(0);
+  }
+
+  // ── Gallery mode (photo-cards) ──
+  function showLbItem(gallery, index) {
+    lbTeardown();
+    const item = galleries[gallery][index];
+    lbCap.textContent = item.caption || '';
+    lbCounter.textContent = galleries[gallery].length > 1 ? (index + 1) + ' / ' + galleries[gallery].length : '';
+    setNavVisibility(galleries[gallery].length);
+    lbImg.src = item.src; lbImg.style.display = 'block';
+  }
+
+  function openLightbox(gallery, index) {
+    lbMode = 'gallery';
+    lbGallery = gallery; lbIndex = index;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    showLbItem(gallery, index);
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lbTeardown();
+    lbCounter.textContent = '';
+  }
+
+  function lbNav(dir) {
+    if (lbMode === 'folder') {
+      lbSlideIndex = (lbSlideIndex + dir + lbSlides.length) % lbSlides.length;
+      showSlide(lbSlideIndex);
+    } else {
+      const arr = galleries[lbGallery];
+      lbIndex = (lbIndex + dir + arr.length) % arr.length;
+      showLbItem(lbGallery, lbIndex);
+    }
+  }
+
+  document.querySelectorAll('.canvas-card[data-slides]').forEach(card => {
+    card.addEventListener('click', () => openFolderLightbox(card));
+  });
+  document.querySelectorAll('.photo-card[data-gallery]').forEach(card => {
+    card.addEventListener('click', () => openLightbox(card.dataset.gallery, parseInt(card.dataset.index)));
+  });
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  lbPrevBtn.addEventListener('click', () => lbNav(-1));
+  lbNextBtn.addEventListener('click', () => lbNav(1));
+  lightbox.addEventListener('click', e => { if (e.target===lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key==='Escape') closeLightbox();
+    if (e.key==='ArrowLeft')  lbNav(-1);
+    if (e.key==='ArrowRight') lbNav(1);
+  });
+
+  /* ════════════════════════════════════════
+     CLIP STACK BADGES
+  ════════════════════════════════════════ */
+  document.querySelectorAll('.canvas-card[data-slides]').forEach(card => {
+    const slides = JSON.parse(card.dataset.slides || '[]');
+    if (slides.length > 1) {
+      const badge = document.createElement('div');
+      badge.className = 'clip-badge';
+      badge.innerHTML = '&#9654; ' + slides.length + ' clips';
+      card.appendChild(badge);
+    }
+  });
+
+  /* ════════════════════════════════════════
+     NAV TOGGLE
+  ════════════════════════════════════════ */
+  const navToggle = document.getElementById('navToggle');
+  const navLinks  = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+  document.addEventListener('click', e => {
+    if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && !navToggle.contains(e.target)) {
+      navLinks.classList.remove('open');
+    }
+  });
+
+  /* ════════════════════════════════════════
+     SCROLL REVEAL
+  ════════════════════════════════════════ */
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  /* ════════════════════════════════════════
+     CONTACT FORM — Formspree AJAX
+  ════════════════════════════════════════ */
+  const form    = document.getElementById('contactForm');
+  // ── Video visibility: pause when scrolled out of view, play when in view ──
+  (function () {
+    const gridVids = document.querySelectorAll('.canvas-card video');
+    if (!gridVids.length || !('IntersectionObserver' in window)) return;
+    const vidObs = new IntersectionObserver(entries => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (isIntersecting) { target.play().catch(() => {}); }
+        else                { target.pause(); }
+      });
+    }, { threshold: 0.15 });
+    gridVids.forEach(v => vidObs.observe(v));
+  })();
+
+  const formMsg = document.getElementById('formMsg');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('.btn-submit');
+    btn.disabled=true; btn.textContent='Sending…';
+    formMsg.className='form-msg'; formMsg.textContent='';
+    try {
+      const res = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{Accept:'application/json'} });
+      if (res.ok) { formMsg.textContent="✓ Message sent! I'll be in touch soon."; formMsg.className='form-msg success'; form.reset(); }
+      else throw new Error();
+    } catch { formMsg.textContent="✗ Something went wrong. Please try emailing directly."; formMsg.className='form-msg error'; }
+    finally {
+      btn.disabled=false;
+      btn.innerHTML='<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Message';
+    }
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ian Kehayes — project breakdowns for Unicorn Academy, Wishenpoof, Space Ranger Roger, Weather Hunters, and more. Studios, roles, and the work behind the frame." />
+  <meta name="theme-color" content="#0d0d10" />
+  <meta property="og:title" content="Ian Kehayes — Projects" />
+  <meta property="og:description" content="In-depth look at individual shows and my roles on them." />
+  <meta property="og:type" content="website" />
+  <title>Ian Kehayes — Projects</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d0d10'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='%23b5a99a' font-family='Georgia,serif' font-size='13' font-weight='bold'>IK</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --clr-bg:      #f5f4f2;
+      --clr-surface: #ffffff;
+      --clr-text:    #1a1a1a;
+      --clr-muted:   #6b6b6b;
+      --clr-accent:  #b5a99a;
+      --clr-border:  #e0ddd9;
+      --clr-dark:    #0d0d10;
+      --clr-dark2:   #13131a;
+      --font:        'Segoe UI', system-ui, -apple-system, sans-serif;
+      --radius:      6px;
+      --transition:  0.3s ease;
+      --max-w:       1160px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--clr-bg); color: var(--clr-text); line-height: 1.65; font-size: 16px; }
+    img  { display: block; width: 100%; height: 100%; object-fit: cover; }
+    a    { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(13,13,16,0.88); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 0 2rem; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 1.05rem; font-weight: 600; letter-spacing: 0.04em; color: #fff; }
+    .nav-links { display: flex; gap: 1.75rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; }
+    .nav-toggle span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: var(--transition); }
+
+    /* ── Shared ── */
+    .container { max-width: var(--max-w); margin: 0 auto; }
+    .section-label { display: inline-block; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--clr-accent); margin-bottom: 0.6rem; }
+    .section-title { font-family: 'Raleway', var(--font); font-size: clamp(1.6rem,3.5vw,2.3rem); font-weight: 300; margin-bottom: 1.25rem; }
+    .divider { width: 40px; height: 2px; background: var(--clr-accent); margin-bottom: 2rem; }
+
+    /* ── Page Header ── */
+    .page-header {
+      background: var(--clr-dark); padding: 140px 2rem 80px;
+      text-align: center; color: #fff;
+    }
+    .page-header h1 { font-size: clamp(2rem,5vw,3.5rem); font-weight: 200; letter-spacing: 0.05em; margin-bottom: 1rem; }
+    .page-header p { color: rgba(255,255,255,0.5); max-width: 560px; margin: 0 auto; font-size: 1rem; }
+
+    /* ── Project Grid ── */
+    #projects { padding: 80px 2rem; }
+    .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .project-card {
+      background: var(--clr-surface); border: 1px solid var(--clr-border);
+      border-radius: var(--radius); overflow: hidden;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+
+    /* ── Card Image / Video Area ── */
+    .project-card-img {
+      aspect-ratio: 16/9; background: var(--clr-dark2); overflow: hidden;
+      position: relative;
+    }
+    .project-card-img[data-slides] { cursor: pointer; }
+    .project-card-img video {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .project-card-img .img-placeholder {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.18); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+
+    /* Clip stack indicator */
+    .clip-badge {
+      position: absolute; bottom: 10px; right: 10px;
+      background: rgba(0,0,0,0.42); border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.85); border-radius: 20px;
+      font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 9px; backdrop-filter: blur(4px);
+      display: flex; align-items: center; gap: 4px;
+      pointer-events: none; z-index: 3;
+      opacity: 0.55; transition: opacity 0.3s ease;
+    }
+    .project-card-img[data-slides]:hover .clip-badge { opacity: 1; }
+
+    /* ── Card Body ── */
+    .project-card-body { padding: 1.75rem; }
+    .project-card-meta { font-size: 0.72rem; color: var(--clr-accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .project-card-title { font-family: 'Raleway', var(--font); font-size: 1.25rem; font-weight: 300; margin-bottom: 0.6rem; }
+    .project-card-desc { color: var(--clr-muted); font-size: 0.95rem; line-height: 1.65; margin-bottom: 1.25rem; }
+    .project-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .project-tag {
+      font-size: 0.68rem; letter-spacing: 0.07em; text-transform: uppercase;
+      background: var(--clr-bg); border: 1px solid var(--clr-border);
+      color: var(--clr-muted); border-radius: 20px; padding: 3px 10px;
+    }
+
+    /* ── Lightbox ── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(8,8,10,0.95);
+      display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .lightbox.open { display: flex; }
+    .lb-close {
+      position: fixed; top: 18px; right: 22px; background: none; border: none;
+      color: rgba(255,255,255,0.65); font-size: 1.8rem; cursor: pointer; line-height: 1;
+      transition: color var(--transition); z-index: 10;
+    }
+    .lb-close:hover { color: #fff; }
+    .lb-nav {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.4);
+      backdrop-filter: blur(6px);
+      color: #fff; cursor: pointer; width: 44px; height: 44px; border-radius: 50%;
+      font-size: 1.4rem; display: flex; align-items: center; justify-content: center;
+      transition: background var(--transition), border-color var(--transition);
+      z-index: 10;
+    }
+    .lb-nav:hover { background: rgba(0,0,0,0.75); border-color: rgba(255,255,255,0.7); }
+    #lbPrev { left: 16px; } #lbNext { right: 16px; }
+    .lb-inner { position: relative; max-width: 900px; width: 100%; }
+    #lbImg   { max-height: 82vh; width: auto; max-width: 100%; margin: 0 auto; border-radius: var(--radius); object-fit: contain; display: none; }
+    #lbVideo { max-height: 82vh; width: auto; max-width: 100%; margin: 0 auto; border-radius: var(--radius); object-fit: contain; display: none; background: #000; }
+    .lb-caption { text-align: center; color: rgba(255,255,255,0.5); margin-top: 14px; font-size: 0.82rem; letter-spacing: 0.06em; }
+    .lb-counter { text-align: center; color: rgba(255,255,255,0.3); margin-top: 6px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; min-height: 1em; }
+
+    /* ── Scroll Reveal ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Bottom CTA ── */
+    .bottom-cta {
+      background: var(--clr-dark); padding: 72px 2rem;
+      text-align: center;
+    }
+    .bottom-cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.75rem 2rem; border-radius: var(--radius);
+      font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase;
+      font-family: var(--font); cursor: pointer; border: none;
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+      text-decoration: none;
+    }
+    .btn-cta-primary {
+      background: var(--clr-accent); color: #fff;
+    }
+    .btn-cta-primary:hover { background: #c9bdb0; transform: translateY(-2px); }
+    .btn-cta-outline {
+      background: transparent; color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .btn-cta-outline:hover { border-color: rgba(255,255,255,0.6); color: #fff; transform: translateY(-2px); }
+
+    /* ── Footer ── */
+    footer { background: var(--clr-dark); border-top: 1px solid rgba(255,255,255,0.07); text-align: center; padding: 2.5rem 2rem; color: rgba(255,255,255,0.28); font-size: 0.78rem; letter-spacing: 0.08em; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none; flex-direction: column;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--clr-dark); border-bottom: 1px solid rgba(255,255,255,0.07);
+        padding: 1.5rem 2rem; gap: 1.25rem;
+      }
+      .nav-links.open { display: flex; }
+      .nav-toggle { display: flex; }
+    }
+    @media (max-width: 700px) {
+      .project-grid { grid-template-columns: 1fr; }
+      .lb-nav { width: 38px; height: 38px; font-size: 1.2rem; }
+      #lbPrev { left: 8px; } #lbNext { right: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <a href="index.html" class="nav-logo">Ian Kehayes</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#work-3d">3D Work</a></li>
+      <li><a href="index.html#design">Design</a></li>
+      <li><a href="index.html#digital-illustration">Illustration</a></li>
+      <li><a href="index.html#photography">Photography</a></li>
+      <li><a href="projects.html" class="active">Projects</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── PAGE HEADER ── -->
+  <div class="page-header">
+    <span class="section-label">Detailed Work</span>
+    <h1>Projects</h1>
+    <p>An in-depth look at individual shows and projects and my roles on them.</p>
+  </div>
+
+  <!-- ── PROJECTS GRID ── -->
+  <section id="projects">
+    <div class="container">
+      <div class="project-grid">
+
+        <!-- ── Unicorn Academy — Senior ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0002.mp4","caption":"Unicorn Academy — Clip 2"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0001.mp4","caption":"Unicorn Academy — Clip 1"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0003.mp4","caption":"Unicorn Academy — Clip 3"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0004.mp4","caption":"Unicorn Academy — Clip 4"},{"src":"images/lighting/unicorn-academy/Portfolio Shot00_V1-0005.mp4","caption":"Unicorn Academy — Clip 5"}]'>
+            <video src="images/lighting/unicorn-academy/Portfolio Shot00_V1-0002.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">Mainframe Studios &middot; Jul 2022 – Oct 2023</div>
+            <h2 class="project-card-title">Unicorn Academy</h2>
+            <p class="project-card-desc">Senior Lighting Artist</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+              <span class="project-tag">Katana</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Wishenpoof — Lead ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0012.mp4","caption":"Wishenpoof — Clip 2"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0011.mp4","caption":"Wishenpoof — Clip 1"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0013.mp4","caption":"Wishenpoof — Clip 3"},{"src":"images/vfx/wishenpoof/Portfolio Shot00_V1-0014.mp4","caption":"Wishenpoof — Clip 4"}]'>
+            <video src="images/vfx/wishenpoof/Portfolio Shot00_V1-0013.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">DHX Media</div>
+            <h2 class="project-card-title">Wishenpoof</h2>
+            <p class="project-card-desc">Lead Compositor</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Space Ranger Roger — Lead ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0010.mp4","caption":"Space Ranger Roger — Clip 2"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0009.mp4","caption":"Space Ranger Roger — Clip 1"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0030.mp4","caption":"Space Ranger Roger — Clip 3"}]'>
+            <video src="images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0010.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">DHX Media &middot; Oct 2016 – Jun 2017</div>
+            <h2 class="project-card-title">Space Ranger Roger</h2>
+            <p class="project-card-desc">Lead Render &amp; VFX / 3D set creation for 2D background integration</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Weather Hunters ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/lighting/weather-hunters/Compound Clip 43_00_V1-0042.mp4","caption":"Weather Hunters — Clip 1"},{"src":"images/lighting/weather-hunters/Compound Clip 44_00_V1-0043.mp4","caption":"Weather Hunters — Clip 2"},{"src":"images/lighting/weather-hunters/Compound Clip 45_00_V1-0044.mp4","caption":"Weather Hunters — Clip 3"},{"src":"images/lighting/weather-hunters/Compound Clip 46_00_V1-0045.mp4","caption":"Weather Hunters — Clip 4"}]'>
+            <video src="images/lighting/weather-hunters/Compound Clip 46_00_V1-0045.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">IoM Media Ventures &middot; Apr 2024 – Aug 2025</div>
+            <h2 class="project-card-title">Weather Hunters</h2>
+            <p class="project-card-desc">Lighting Artist and Comp DOF</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Caillou ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/compositing/caillou/Compound Clip 36_00_V1-0035.mp4","caption":"Caillou — Clip 1"},{"src":"images/compositing/caillou/Compound Clip 37_00_V1-0036.mp4","caption":"Caillou — Clip 2"},{"src":"images/compositing/caillou/Compound Clip 38_00_V1-0037.mp4","caption":"Caillou — Clip 3"},{"src":"images/compositing/caillou/Compound Clip 39_00_V1-0038.mp4","caption":"Caillou — Clip 4"}]'>
+            <video src="images/compositing/caillou/Compound Clip 38_00_V1-0037.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">IoM Media Ventures &middot; 2019 – 2020</div>
+            <h2 class="project-card-title">Caillou</h2>
+            <p class="project-card-desc">Compositor</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Charlie's Colorforms City ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0008.mp4","caption":"Charlie&apos;s Colorforms City — Clip 3"},{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0006.mp4","caption":"Charlie&apos;s Colorforms City — Clip 1"},{"src":"images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0007.mp4","caption":"Charlie&apos;s Colorforms City — Clip 2"}]'>
+            <video src="images/compositing/charlies-colorforms-city/Portfolio Shot00_V1-0008.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">IoM Media Ventures &middot; Feb 2018 – Nov 2018</div>
+            <h2 class="project-card-title">Charlie's Colorforms City</h2>
+            <p class="project-card-desc">Lighting / Compositing / VFX Artist</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Bob the Builder ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/lighting/bob-the-builder/Compound Clip 32_00_V1-0032.mp4","caption":"Bob the Builder — Clip 2"},{"src":"images/lighting/bob-the-builder/Compound Clip 31_00_V1-0031.mp4","caption":"Bob the Builder — Clip 1"},{"src":"images/lighting/bob-the-builder/Compound Clip 33_00_V1-0033.mp4","caption":"Bob the Builder — Clip 3"},{"src":"images/lighting/bob-the-builder/Compound Clip 35_00_V1-0034.mp4","caption":"Bob the Builder — Clip 4"}]'>
+            <video src="images/lighting/bob-the-builder/Compound Clip 32_00_V1-0032.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">DHX Media &middot; Jun 2017 – Feb 2018</div>
+            <h2 class="project-card-title">Bob the Builder</h2>
+            <p class="project-card-desc">Lighting Artist</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Fireman Sam ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/lighting/fireman-sam/Compound Clip 40_00_V1-0039.mp4","caption":"Fireman Sam — Clip 1"},{"src":"images/lighting/fireman-sam/Compound Clip 41_00_V1-0040.mp4","caption":"Fireman Sam — Clip 2"},{"src":"images/lighting/fireman-sam/Compound Clip 42_00_V1-0041.mp4","caption":"Fireman Sam — Clip 3"}]'>
+            <video src="images/lighting/fireman-sam/Compound Clip 40_00_V1-0039.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">DHX Media &middot; 2015 – 2016</div>
+            <h2 class="project-card-title">Fireman Sam</h2>
+            <p class="project-card-desc">Lighting Artist</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Inspector Gadget 2.0 ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/compositing/inspector-gadget/Portfolio Shot00_V1-0028.mp4","caption":"Inspector Gadget — Clip 2"},{"src":"images/compositing/inspector-gadget/Portfolio Shot00_V1-0027.mp4","caption":"Inspector Gadget — Clip 1"},{"src":"images/compositing/inspector-gadget/Portfolio Shot00_V1-0029.mp4","caption":"Inspector Gadget — Clip 3"}]'>
+            <video src="images/compositing/inspector-gadget/Portfolio Shot00_V1-0029.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">DHX Media &middot; Sep 2014 – Dec 2014</div>
+            <h2 class="project-card-title">Inspector Gadget 2.0</h2>
+            <p class="project-card-desc">Compositor</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Little People ── -->
+        <div class="project-card reveal">
+          <div class="project-card-img"
+               data-slides='[{"src":"images/lighting/little-people/Portfolio Shot00_V1-0017.mp4","caption":"Little People — Clip 2"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0016.mp4","caption":"Little People — Clip 1"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0018.mp4","caption":"Little People — Clip 3"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0019.mp4","caption":"Little People — Clip 4"},{"src":"images/lighting/little-people/Portfolio Shot00_V1-0020.mp4","caption":"Little People — Clip 5"}]'>
+            <video src="images/lighting/little-people/Portfolio Shot00_V1-0019.mp4" preload="none" autoplay loop muted playsinline></video>
+          </div>
+          <div class="project-card-body">
+            <div class="project-card-meta">DHX Media</div>
+            <h2 class="project-card-title">Little People</h2>
+            <p class="project-card-desc">Lighting Artist</p>
+            <div class="project-card-tags">
+              <span class="project-tag">Maya</span>
+              <span class="project-tag">Nuke</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BOTTOM CTA ── -->
+  <div class="bottom-cta">
+    <div class="bottom-cta-buttons">
+      <a href="index.html" class="btn-cta btn-cta-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Return Home
+      </a>
+      <a href="index.html#contact" class="btn-cta btn-cta-outline">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Contact Me
+      </a>
+    </div>
+  </div>
+
+  <!-- ── LIGHTBOX ── -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+    <button class="lb-close" id="lbClose">&#x2715;</button>
+    <button class="lb-nav" id="lbPrev">&#8249;</button>
+    <div class="lb-inner">
+      <img id="lbImg" src="" alt="" />
+      <video id="lbVideo" preload="none" autoplay loop muted playsinline></video>
+      <div class="lb-caption" id="lbCaption"></div>
+      <div class="lb-counter" id="lbCounter"></div>
+    </div>
+    <button class="lb-nav" id="lbNext">&#8250;</button>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer><p>&copy; <span id="footerYear"></span> Ian Kehayes — All rights reserved</p></footer>
+
+  <script>
+  /* ── Dynamic footer year ── */
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  /* ── Nav toggle ── */
+  const navToggle = document.getElementById('navToggle');
+  const navLinks  = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+  document.addEventListener('click', e => {
+    if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && !navToggle.contains(e.target)) {
+      navLinks.classList.remove('open');
+    }
+  });
+
+  /* ── Scroll reveal ── */
+  const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+  /* ── Clip stack badges ── */
+  document.querySelectorAll('.project-card-img[data-slides]').forEach(el => {
+    const slides = JSON.parse(el.dataset.slides || '[]');
+    if (slides.length > 1) {
+      const badge = document.createElement('div');
+      badge.className = 'clip-badge';
+      badge.innerHTML = '&#9654; ' + slides.length + ' clips';
+      el.appendChild(badge);
+    }
+  });
+
+  /* ── Lightbox ── */
+  const lightbox  = document.getElementById('lightbox');
+  const lbImg     = document.getElementById('lbImg');
+  const lbVid     = document.getElementById('lbVideo');
+  const lbCap     = document.getElementById('lbCaption');
+  const lbCounter = document.getElementById('lbCounter');
+  const lbPrevBtn = document.getElementById('lbPrev');
+  const lbNextBtn = document.getElementById('lbNext');
+  let lbSlides = [], lbSlideIndex = 0;
+
+  function isVideo(src) { return /\.(mp4|webm|ogg|mov)$/i.test(src); }
+
+  function lbTeardown() {
+    lbImg.style.display = 'none'; lbImg.src = '';
+    lbVid.style.display = 'none'; lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load();
+  }
+
+  function setNavVisibility(count) {
+    const v = count > 1 ? 'visible' : 'hidden';
+    lbPrevBtn.style.visibility = v;
+    lbNextBtn.style.visibility = v;
+  }
+
+  function showSlide(index) {
+    lbTeardown();
+    const slide = lbSlides[index];
+    lbCap.textContent = slide.caption || '';
+    lbCounter.textContent = lbSlides.length > 1 ? (index + 1) + ' / ' + lbSlides.length : '';
+    setNavVisibility(lbSlides.length);
+    if (isVideo(slide.src)) {
+      lbVid.src = slide.src; lbVid.style.display = 'block'; lbVid.play();
+    } else {
+      lbImg.src = slide.src; lbImg.style.display = 'block';
+    }
+  }
+
+  function openLightbox(el) {
+    lbSlides = JSON.parse(el.dataset.slides || '[]');
+    lbSlideIndex = 0;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    showSlide(0);
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    lbTeardown();
+    lbCounter.textContent = '';
+  }
+
+  function lbNav(dir) {
+    lbSlideIndex = (lbSlideIndex + dir + lbSlides.length) % lbSlides.length;
+    showSlide(lbSlideIndex);
+  }
+
+  document.querySelectorAll('.project-card-img[data-slides]').forEach(el => {
+    el.addEventListener('click', () => openLightbox(el));
+  });
+  // ── Video visibility: pause when scrolled out of view, play when in view ──
+  (function () {
+    const gridVids = document.querySelectorAll('.project-card-img video');
+    if (!gridVids.length || !('IntersectionObserver' in window)) return;
+    const vidObs = new IntersectionObserver(entries => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (isIntersecting) { target.play().catch(() => {}); }
+        else                { target.pause(); }
+      });
+    }, { threshold: 0.15 });
+    gridVids.forEach(v => vidObs.observe(v));
+  })();
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  lbPrevBtn.addEventListener('click', () => lbNav(-1));
+  lbNextBtn.addEventListener('click', () => lbNav(1));
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft')  lbNav(-1);
+    if (e.key === 'ArrowRight') lbNav(1);
+  });
+  </script>
+</body>
+</html>
