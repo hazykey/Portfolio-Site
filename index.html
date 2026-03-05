@@ -132,7 +132,6 @@
       border: 1px solid rgba(255,255,255,0.05);
       will-change: transform;
     }
-    .canvas-card canvas { position: absolute; inset: 0; width: 100%; height: 100%; will-change: transform; }
     .canvas-card img    { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .canvas-card video  { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: transform; }
     /* shared overlay (canvas cards) */
@@ -146,8 +145,8 @@
     .grid-info strong { display: block; font-size: 0.9rem; font-weight: 500; }
     .grid-info span   { font-size: 0.75rem; opacity: 0.75; }
     /* Canvas card: scale video/canvas on hover (no overlay darkening) */
-    .canvas-card video, .canvas-card canvas { transition: transform 0.55s ease; }
-    .canvas-card:hover video, .canvas-card:hover canvas { transform: scale(1.05); }
+    .canvas-card video { transition: transform 0.55s ease; }
+    .canvas-card:hover video { transform: scale(1.05); }
     /* Photo card: scale only, no brightness darkening */
     .photo-card img { transition: transform 0.6s ease; will-change: transform; }
     .photo-card:hover img { transform: scale(1.05); }
@@ -210,7 +209,6 @@
     .lb-inner { position: relative; max-width: 900px; width: 100%; }
     #lbImg   { max-height: 82vh; width: auto; max-width: 100%; margin: 0 auto; border-radius: var(--radius); object-fit: contain; display: none; }
     #lbVideo { max-height: 82vh; width: auto; max-width: 100%; margin: 0 auto; border-radius: var(--radius); object-fit: contain; display: none; background: #000; }
-    #lbCanvas { display: none; border-radius: var(--radius); background: var(--clr-dark2); border: 1px solid rgba(255,255,255,0.06); }
     .lb-caption { text-align: center; color: rgba(255,255,255,0.5); margin-top: 14px; font-size: 0.82rem; letter-spacing: 0.06em; }
     .lb-counter { text-align: center; color: rgba(255,255,255,0.3); margin-top: 6px; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; min-height: 1em; }
     .lb-placeholder { width: 100%; aspect-ratio: 16/9; max-width: 860px; margin: 0 auto; background: #13131a; border: 1px dashed rgba(255,255,255,0.12); border-radius: var(--radius); display: none; align-items: center; justify-content: center; color: rgba(255,255,255,0.25); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; }
@@ -367,9 +365,8 @@
           <div class="grid-overlay"><div class="grid-info"><strong>Little People</strong><span>Lighting</span></div></div>
         </div>
 
-        <div class="canvas-card" data-anim="terrain"
+        <div class="canvas-card"
              data-slides='[{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0030.mp4","caption":"Space Ranger Roger — Clip 3"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0009.mp4","caption":"Space Ranger Roger — Clip 1"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0010.mp4","caption":"Space Ranger Roger — Clip 2"}]'>
-          <canvas data-anim="terrain"></canvas>
           <video src="images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0030.mp4" preload="none" autoplay loop muted playsinline></video>
           <div class="grid-overlay"><div class="grid-info"><strong>Space Ranger Roger</strong><span>Lighting &amp; Compositing</span></div></div>
         </div>
@@ -444,9 +441,8 @@
           <div class="grid-overlay"><div class="grid-info"><strong>Charlie's Colorforms City</strong><span>VFX</span></div></div>
         </div>
 
-        <div class="canvas-card" data-anim="sphere"
+        <div class="canvas-card"
              data-slides='[{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0009.mp4","caption":"Space Ranger Roger — Clip 1"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0010.mp4","caption":"Space Ranger Roger — Clip 2"},{"src":"images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0030.mp4","caption":"Space Ranger Roger — Clip 3"}]'>
-          <canvas data-anim="sphere"></canvas>
           <video src="images/lighting-compositing/space-ranger-roger/Portfolio Shot00_V1-0009.mp4" preload="none" autoplay loop muted playsinline></video>
           <div class="grid-overlay"><div class="grid-info"><strong>Space Ranger Roger</strong><span>VFX</span></div></div>
         </div>
@@ -628,8 +624,6 @@
     <div class="lb-inner">
       <img id="lbImg" src="" alt="" />
       <video id="lbVideo" preload="none" autoplay loop muted playsinline></video>
-      <canvas id="lbCanvas" width="860" height="860"></canvas>
-      <div class="lb-placeholder" id="lbPlaceholder">No image — add a src path to data-slides</div>
       <div class="lb-caption" id="lbCaption"></div>
       <div class="lb-counter" id="lbCounter"></div>
     </div>
@@ -707,24 +701,6 @@
   ════════════════════════════════════════ */
   const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-  function fitCanvas(canvas) {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    const w = Math.round(rect.width  * DPR);
-    const h = Math.round(rect.height * DPR);
-    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
-    const ctx = canvas.getContext('2d');
-    ctx.setTransform(1,0,0,1,0,0);
-    ctx.scale(DPR, DPR);
-    return ctx;
-  }
-
-  // 3D rotation helpers
-  function ry(x,y,z,a){ return [x*Math.cos(a)-z*Math.sin(a), y, x*Math.sin(a)+z*Math.cos(a)]; }
-  function rx(x,y,z,a){ return [x, y*Math.cos(a)-z*Math.sin(a), y*Math.sin(a)+z*Math.cos(a)]; }
-  function perspective(x,y,z,fov,cx,cy,scale){
-    const s = fov/(fov+z);
-    return { x: cx+x*s*scale, y: cy+y*s*scale, z, s };
-  }
 
   /* ════════════════════════════════════════
      HERO CANVAS — Constellation / Neural Net
@@ -772,251 +748,6 @@
     draw();
   })();
 
-  /* ════════════════════════════════════════
-     CANVAS ANIMATION LIBRARY
-  ════════════════════════════════════════ */
-  const animFns = {
-
-    /* ── Wireframe Cube ── */
-    cube(canvas, ctx, isLb) {
-      const V = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
-      const E = [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
-      let ay=0, ax=0.4; let id;
-      function draw() {
-        const W=canvas.width/DPR, H=canvas.height/DPR;
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-        ctx.clearRect(0,0,W,H);
-        const size=Math.min(W,H)*0.28, fov=4;
-        const proj = V.map(([x,y,z])=>{
-          [x,y,z]=ry(x,y,z,ay); [x,y,z]=rx(x,y,z,ax);
-          return perspective(x,y,z,fov,W/2,H/2,size);
-        });
-        E.forEach(([a,b])=>{
-          const depth=(proj[a].z+proj[b].z)/2;
-          const alpha=0.5+depth*0.18;
-          ctx.strokeStyle=`rgba(181,169,154,${Math.min(0.95,Math.max(0.2,alpha))})`;
-          ctx.lineWidth=isLb?1.5:1;
-          ctx.beginPath(); ctx.moveTo(proj[a].x,proj[a].y); ctx.lineTo(proj[b].x,proj[b].y); ctx.stroke();
-        });
-        proj.forEach(p=>{
-          const r=Math.max(1,(p.s*2+(isLb?3:2)));
-          ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2);
-          ctx.fillStyle='rgba(255,255,255,0.9)'; ctx.fill();
-        });
-        ay+=0.007; id=requestAnimationFrame(draw);
-      }
-      draw(); return ()=>cancelAnimationFrame(id);
-    },
-
-    /* ── Particle Sphere ── */
-    sphere(canvas, ctx, isLb) {
-      const N=isLb?220:120;
-      const pts=[];
-      for(let i=0;i<N;i++){
-        const phi=Math.acos(1-2*(i+0.5)/N), th=Math.PI*(1+Math.sqrt(5))*i;
-        pts.push([Math.sin(phi)*Math.cos(th), Math.cos(phi), Math.sin(phi)*Math.sin(th)]);
-      }
-      let ay=0, ax=0.25; let id;
-      function draw(){
-        const W=canvas.width/DPR, H=canvas.height/DPR;
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-        ctx.clearRect(0,0,W,H);
-        const size=Math.min(W,H)*0.34, fov=4.5;
-        const proj=pts.map(([x,y,z])=>{
-          [x,y,z]=ry(x,y,z,ay); [x,y,z]=rx(x,y,z,ax);
-          return perspective(x,y,z,fov,W/2,H/2,size);
-        }).sort((a,b)=>a.z-b.z);
-        proj.forEach(p=>{
-          const t=(p.z+1)/2;
-          const r=Math.max(0.5,t*2.5+(isLb?1.5:1));
-          ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2);
-          ctx.fillStyle=`rgba(${80+Math.round(t*80)},${150+Math.round(t*50)},220,${0.3+t*0.65})`;
-          ctx.fill();
-        });
-        ay+=0.005; id=requestAnimationFrame(draw);
-      }
-      draw(); return ()=>cancelAnimationFrame(id);
-    },
-
-    /* ── Torus Wireframe ── */
-    torus(canvas, ctx, isLb) {
-      const R=0.6, r=0.28, NS=isLb?30:18, NT=isLb?30:18;
-      const V=[];
-      for(let i=0;i<NT;i++) for(let j=0;j<NS;j++){
-        const u=2*Math.PI*i/NT, v=2*Math.PI*j/NS;
-        V.push([(R+r*Math.cos(v))*Math.cos(u),(R+r*Math.cos(v))*Math.sin(u),r*Math.sin(v)]);
-      }
-      let ay=0, ax=0.5; let id;
-      function draw(){
-        const W=canvas.width/DPR, H=canvas.height/DPR;
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-        ctx.clearRect(0,0,W,H);
-        const size=Math.min(W,H)*0.36, fov=4;
-        const proj=V.map(([x,y,z])=>{
-          [x,y,z]=ry(x,y,z,ay); [x,y,z]=rx(x,y,z,ax);
-          return perspective(x,y,z,fov,W/2,H/2,size);
-        });
-        ctx.lineWidth=0.7;
-        for(let i=0;i<NT;i++) for(let j=0;j<NS;j++){
-          const a=i*NS+j, b=i*NS+(j+1)%NS, c=((i+1)%NT)*NS+j;
-          const drawEdge=(p1,p2)=>{
-            const depth=(p1.z+p2.z)/2, alpha=0.2+(depth+1)*0.3;
-            ctx.strokeStyle=`rgba(180,120,220,${Math.min(0.9,Math.max(0.1,alpha))})`;
-            ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
-          };
-          drawEdge(proj[a],proj[b]); drawEdge(proj[a],proj[c]);
-        }
-        ay+=0.006; id=requestAnimationFrame(draw);
-      }
-      draw(); return ()=>cancelAnimationFrame(id);
-    },
-
-    /* ── Wave Terrain ── */
-    terrain(canvas, ctx, isLb) {
-      const G=isLb?22:14; let t=0; let id;
-      function draw(){
-        const W=canvas.width/DPR, H=canvas.height/DPR;
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-        ctx.clearRect(0,0,W,H);
-        const size=Math.min(W,H)*0.38;
-        const grid=[];
-        for(let i=0;i<=G;i++) for(let j=0;j<=G;j++){
-          const gx=(i/G-0.5)*2, gy=(j/G-0.5)*2;
-          const gz=Math.sin(gx*2.8+t)*0.35+Math.cos(gy*2.4+t*0.7)*0.25;
-          let [x,y,z]=ry(gx,gz,gy,0.4);
-          [x,y,z]=rx(x,y,z,0.52);
-          const p=perspective(x,y,z,4.2,W/2,H/2,size);
-          grid.push(p);
-        }
-        const row=G+1;
-        for(let i=0;i<G;i++) for(let j=0;j<G;j++){
-          const tl=grid[i*row+j], tr=grid[i*row+j+1], bl=grid[(i+1)*row+j];
-          const depth=(tl.z+tr.z+bl.z)/3, alpha=0.15+(depth+1)*0.32;
-          ctx.strokeStyle=`rgba(80,200,160,${Math.min(0.9,Math.max(0.08,alpha))})`;
-          ctx.lineWidth=0.8;
-          ctx.beginPath(); ctx.moveTo(tl.x,tl.y); ctx.lineTo(tr.x,tr.y); ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(tl.x,tl.y); ctx.lineTo(bl.x,bl.y); ctx.stroke();
-        }
-        t+=0.018; id=requestAnimationFrame(draw);
-      }
-      draw(); return ()=>cancelAnimationFrame(id);
-    },
-
-    /* ── Double Helix ── */
-    helix(canvas, ctx, isLb) {
-      const N=isLb?60:38; let t=0; let id;
-      function draw(){
-        const W=canvas.width/DPR, H=canvas.height/DPR;
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-        ctx.clearRect(0,0,W,H);
-        const size=Math.min(W,H)*0.34, fov=4.5;
-        const strand1=[], strand2=[];
-        for(let i=0;i<N;i++){
-          const angle=2*Math.PI*i/(N/4)+t;
-          const yPos=(i/N-0.5)*2;
-          const r=0.5;
-          let [x,y,z]=ry(r*Math.cos(angle), yPos, r*Math.sin(angle), t*0.3);
-          strand1.push(perspective(x,y,z,fov,W/2,H/2,size));
-          let [x2,y2,z2]=ry(r*Math.cos(angle+Math.PI), yPos, r*Math.sin(angle+Math.PI), t*0.3);
-          strand2.push(perspective(x2,y2,z2,fov,W/2,H/2,size));
-        }
-        // draw rungs
-        for(let i=0;i<N;i+=3){
-          const p1=strand1[i], p2=strand2[i];
-          ctx.strokeStyle='rgba(220,180,80,0.22)'; ctx.lineWidth=0.8;
-          ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
-        }
-        // draw strands
-        [strand1,strand2].forEach((strand,si)=>{
-          for(let i=0;i<strand.length-1;i++){
-            const p=strand[i], q=strand[i+1];
-            const depth=(p.z+q.z)/2, alpha=0.25+(depth+1)*0.35;
-            ctx.strokeStyle=si===0?`rgba(220,180,80,${Math.min(0.95,alpha)})`:`rgba(255,140,100,${Math.min(0.95,alpha)})`;
-            ctx.lineWidth=isLb?2:1.5;
-            ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke();
-          }
-        });
-        // dots
-        [...strand1,...strand2].forEach(p=>{
-          ctx.beginPath(); ctx.arc(p.x,p.y,(p.s+0.5)*(isLb?2.5:1.8),0,Math.PI*2);
-          ctx.fillStyle='rgba(255,220,120,0.85)'; ctx.fill();
-        });
-        t+=0.012; id=requestAnimationFrame(draw);
-      }
-      draw(); return ()=>cancelAnimationFrame(id);
-    },
-
-    /* ── Galaxy Spiral ── */
-    galaxy(canvas, ctx, isLb) {
-      const N=isLb?500:280;
-      const pts=Array.from({length:N},(_,i)=>{
-        const arm=Math.floor(Math.random()*3);
-        const d=0.1+Math.random()*0.85;
-        const spread=(1-d)*0.45;
-        const angle=arm*(2*Math.PI/3)+d*3.5+(Math.random()-0.5)*spread*2;
-        return {
-          x:d*Math.cos(angle)+(Math.random()-0.5)*spread,
-          y:(Math.random()-0.5)*0.12,
-          z:d*Math.sin(angle)+(Math.random()-0.5)*spread,
-          r:Math.random(),
-          bright:Math.random()
-        };
-      });
-      let ay=0; let id;
-      function draw(){
-        const W=canvas.width/DPR, H=canvas.height/DPR;
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-        ctx.clearRect(0,0,W,H);
-        const size=Math.min(W,H)*0.42, fov=5;
-        const proj=pts.map(p=>{
-          let [x,y,z]=ry(p.x,p.y,p.z,ay);
-          [x,y,z]=rx(x,y,z,0.35);
-          return {...perspective(x,y,z,fov,W/2,H/2,size), r:p.r, bright:p.bright};
-        }).sort((a,b)=>a.z-b.z);
-        proj.forEach(p=>{
-          const t=(p.z+1)/2;
-          const rad=Math.max(0.4,p.r*2.2*p.s*(isLb?1.5:1));
-          const hue=200+p.bright*60;
-          ctx.beginPath(); ctx.arc(p.x,p.y,rad,0,Math.PI*2);
-          ctx.fillStyle=`hsla(${hue},80%,${60+p.bright*35}%,${0.2+t*0.75})`;
-          ctx.fill();
-        });
-        ay+=0.004; id=requestAnimationFrame(draw);
-      }
-      draw(); return ()=>cancelAnimationFrame(id);
-    }
-  };
-
-  /* ════════════════════════════════════════
-     INIT GRID CANVASES with IntersectionObserver
-  ════════════════════════════════════════ */
-  const activeAnims = new Map();
-
-  function startCanvasAnim(canvas, isLb=false) {
-    if (activeAnims.has(canvas)) { activeAnims.get(canvas)(); activeAnims.delete(canvas); }
-    const type = canvas.dataset.anim;
-    if (!animFns[type]) return;
-    const ctx = fitCanvas(canvas);
-    const cancel = animFns[type](canvas, ctx, isLb);
-    activeAnims.set(canvas, cancel);
-  }
-
-  const cardObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      const canvas = e.target.querySelector('canvas[data-anim]');
-      if (!canvas) return;
-      if (e.isIntersecting) startCanvasAnim(canvas);
-      else if (activeAnims.has(canvas)) { activeAnims.get(canvas)(); activeAnims.delete(canvas); }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.canvas-card').forEach(card => cardObs.observe(card));
-
-  window.addEventListener('resize', () => {
-    document.querySelectorAll('.canvas-card canvas[data-anim]').forEach(canvas => {
-      if (activeAnims.has(canvas)) startCanvasAnim(canvas);
-    });
-  });
 
   /* ════════════════════════════════════════
      LIGHTBOX — folder mode (canvas-cards) + gallery mode (photo-cards)
@@ -1024,16 +755,14 @@
   const lightbox    = document.getElementById('lightbox');
   const lbImg       = document.getElementById('lbImg');
   const lbVid       = document.getElementById('lbVideo');
-  const lbCvs       = document.getElementById('lbCanvas');
   const lbCap       = document.getElementById('lbCaption');
   const lbCounter   = document.getElementById('lbCounter');
-  const lbPlaceholder = document.getElementById('lbPlaceholder');
   const lbPrevBtn   = document.getElementById('lbPrev');
   const lbNextBtn   = document.getElementById('lbNext');
 
   // Gallery data for photo-cards (Design / Illustration)
   const galleries = {};
-  let lbGallery='', lbIndex=0, lbAnimCancel=null;
+  let lbGallery='', lbIndex=0;
   document.querySelectorAll('.photo-card[data-gallery]').forEach(card => {
     const g = card.dataset.gallery;
     if (!galleries[g]) galleries[g] = [];
@@ -1046,9 +775,6 @@
   function lbTeardown() {
     lbImg.style.display='none'; lbImg.src='';
     lbVid.style.display='none'; lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load();
-    lbCvs.style.display='none';
-    lbPlaceholder.style.display='none';
-    if (lbAnimCancel) { lbAnimCancel(); lbAnimCancel=null; }
   }
 
   function setNavVisibility(count) {
@@ -1066,14 +792,10 @@
     lbCap.textContent = slide.caption || '';
     lbCounter.textContent = lbSlides.length > 1 ? (index + 1) + ' / ' + lbSlides.length : '';
     setNavVisibility(lbSlides.length);
-    if (slide.src) {
-      if (isVideo(slide.src)) {
-        lbVid.src = slide.src; lbVid.style.display = 'block'; lbVid.play();
-      } else {
-        lbImg.src = slide.src; lbImg.style.display = 'block';
-      }
+    if (isVideo(slide.src)) {
+      lbVid.src = slide.src; lbVid.style.display = 'block'; lbVid.play();
     } else {
-      lbPlaceholder.style.display = 'flex';
+      lbImg.src = slide.src; lbImg.style.display = 'block';
     }
   }
 
