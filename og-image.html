@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; }
+    body { background: #0d0d10; width: 1200px; height: 630px; overflow: hidden; }
+    canvas { display: block; }
+    #dl { position: fixed; top: 10px; right: 10px; padding: 8px 14px;
+          background: #b5a99a; color: #0d0d10; border: none; cursor: pointer;
+          font-size: 13px; border-radius: 4px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <canvas id="c" width="1200" height="630"></canvas>
+  <button id="dl">⬇ Download PNG</button>
+  <script>
+    // Load Raleway then render
+    const font = new FontFace('Raleway',
+      'url(https://fonts.gstatic.com/s/raleway/v29/1Ptug8zYS_SKggPNyC0IT4ttDfA.woff2)'
+    );
+    font.load().then(f => {
+      document.fonts.add(f);
+      render();
+    }).catch(() => render()); // fallback: render with system font
+
+    function render() {
+      const canvas = document.getElementById('c');
+      const W = 1200, H = 630;
+      const ctx = canvas.getContext('2d');
+
+      // ── Background ──
+      ctx.fillStyle = '#0d0d10';
+      ctx.fillRect(0, 0, W, H);
+
+      // ── Constellation (deterministic LCG) ──
+      const N = 110;
+      const pts = [];
+      let seed = 42;
+      function rand() {
+        seed = (seed * 1664525 + 1013904223) & 0xffffffff;
+        return (seed >>> 0) / 0xffffffff;
+      }
+      for (let i = 0; i < N; i++) pts.push({ x: rand() * W, y: rand() * H });
+
+      const LINK = 160;
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < LINK) {
+            ctx.strokeStyle = `rgba(181,169,154,${((1 - d/LINK)*0.18).toFixed(3)})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+          }
+        }
+      }
+      pts.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(181,169,154,0.55)'; ctx.fill();
+      });
+
+      // ── Vignette ──
+      const vig = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.85);
+      vig.addColorStop(0, 'rgba(13,13,16,0)');
+      vig.addColorStop(1, 'rgba(13,13,16,0.62)');
+      ctx.fillStyle = vig; ctx.fillRect(0, 0, W, H);
+
+      // ── Title: "Ian Kehayes" ──
+      const titleY = H/2 - 28;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+
+      // measure "Ian " and "Kehayes" separately to position them
+      ctx.font = '200 88px Raleway, Segoe UI, system-ui, sans-serif';
+      const ian = ctx.measureText('Ian ');
+      const key = ctx.measureText('Kehayes');
+      const totalW = ian.width + key.width;
+      const startX = W/2 - totalW/2;
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('Ian ', startX, titleY);
+
+      ctx.fillStyle = '#b5a99a';
+      ctx.fillText('Kehayes', startX + ian.width, titleY);
+
+      // ── Rule line ──
+      const ruleW = 420, ruleY = titleY + 28;
+      const grad = ctx.createLinearGradient(W/2 - ruleW/2, ruleY, W/2 + ruleW/2, ruleY);
+      grad.addColorStop(0,    'rgba(181,169,154,0)');
+      grad.addColorStop(0.08, 'rgba(181,169,154,0.4)');
+      grad.addColorStop(0.5,  'rgba(181,169,154,1.0)');
+      grad.addColorStop(0.92, 'rgba(181,169,154,0.4)');
+      grad.addColorStop(1,    'rgba(181,169,154,0)');
+      ctx.strokeStyle = grad; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(W/2 - ruleW/2, ruleY); ctx.lineTo(W/2 + ruleW/2, ruleY); ctx.stroke();
+
+      // ── Subtitle ──
+      ctx.font = '300 17px Raleway, Segoe UI, system-ui, sans-serif';
+      ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(255,255,255,0.58)';
+      ctx.letterSpacing = '0.28em';
+      ctx.fillText('LIGHTING  ·  COMPOSITING  ·  VFX', W/2, ruleY + 42);
+
+      // ── URL ──
+      ctx.font = '300 13px Raleway, Segoe UI, system-ui, sans-serif';
+      ctx.fillStyle = 'rgba(181,169,154,0.42)';
+      ctx.fillText('iankehayes.ca', W/2, H - 34);
+
+      // ── Wire up download ──
+      document.getElementById('dl').onclick = () => {
+        canvas.toBlob(blob => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'og-image.png';
+          a.click();
+        }, 'image/png');
+      };
+
+      // Also expose dataURL for extraction
+      window._pngDataURL = canvas.toDataURL('image/png');
+    }
+  </script>
+</body>
+</html>
