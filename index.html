@@ -291,7 +291,7 @@
     <a href="/" class="nav-logo">Ian Kehayes</a>
     <ul class="nav-links" id="navLinks">
       <li><a href="/about">About</a></li>
-      <li><a href="/work">3D Work</a></li>
+      <li><a href="/work">Work</a></li>
       <li><a href="/design">Design</a></li>
       <li><a href="/illustration">Illustration</a></li>
       <li><a href="/photography">Photography</a></li>
@@ -1177,20 +1177,41 @@
      CONTACT FORM — Formspree AJAX
   ════════════════════════════════════════ */
   const form    = document.getElementById('contactForm');
-  // ── Video visibility: pause when scrolled out of view, play when in view ──
+  // ── Video visibility: pause when off-screen, play when in view (concurrent limit) ──
   (function () {
     const gridVids = document.querySelectorAll('.canvas-card video');
     if (!gridVids.length || !('IntersectionObserver' in window)) return;
+    const isMobile = window.innerWidth < 768;
+    const MAX_PLAYING = isMobile ? 2 : 4;
+    const playing = [];   // ordered oldest→newest
     const timers = new WeakMap();
+
+    function tryPlay(vid) {
+      if (playing.includes(vid)) return;
+      // If at limit, pause the oldest video to free a slot
+      if (playing.length >= MAX_PLAYING) {
+        const oldest = playing.shift();
+        oldest.pause();
+      }
+      vid.play().catch(() => {});
+      playing.push(vid);
+    }
+
+    function doPause(vid) {
+      vid.pause();
+      const i = playing.indexOf(vid);
+      if (i !== -1) playing.splice(i, 1);
+    }
+
     const vidObs = new IntersectionObserver(entries => {
       entries.forEach(({ target, isIntersecting }) => {
         clearTimeout(timers.get(target));
         timers.set(target, setTimeout(() => {
-          if (isIntersecting) { target.play().catch(() => {}); }
-          else                { target.pause(); }
-        }, 150));
+          if (isIntersecting) { tryPlay(target); }
+          else                { doPause(target); }
+        }, 200));
       });
-    }, { threshold: 0.25, rootMargin: '-40px 0px' });
+    }, { threshold: 0.4, rootMargin: '-60px 0px' });
     gridVids.forEach(v => vidObs.observe(v));
   })();
 
