@@ -204,15 +204,15 @@
 
   <!-- ── NAV ── -->
   <nav>
-    <a href="index.html" class="nav-logo">Ian Kehayes</a>
+    <a href="/" class="nav-logo">Ian Kehayes</a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="index.html#about">About</a></li>
-      <li><a href="index.html#work-3d">3D Work</a></li>
-      <li><a href="index.html#design">Design</a></li>
-      <li><a href="index.html#digital-illustration">Illustration</a></li>
-      <li><a href="index.html#photography">Photography</a></li>
-      <li><a href="projects.html" class="active">Projects</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/work">3D Work</a></li>
+      <li><a href="/design">Design</a></li>
+      <li><a href="/illustration">Illustration</a></li>
+      <li><a href="/photography">Photography</a></li>
+      <li><a href="/projects" class="active">Projects</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -409,11 +409,11 @@
   <!-- ── BOTTOM CTA ── -->
   <div class="bottom-cta">
     <div class="bottom-cta-buttons">
-      <a href="index.html" class="btn-cta btn-cta-primary">
+      <a href="/" class="btn-cta btn-cta-primary">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
         Return Home
       </a>
-      <a href="index.html#contact" class="btn-cta btn-cta-outline">
+      <a href="/contact" class="btn-cta btn-cta-outline">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         Contact Me
       </a>
@@ -439,6 +439,11 @@
   <script>
   /* ── Dynamic footer year ── */
   document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  /* ── Clean URL: strip .html suffix ── */
+  if (window.location.pathname.endsWith('.html')) {
+    history.replaceState({}, '', '/projects');
+  }
 
   /* ── Nav toggle ── */
   const navToggle = document.getElementById('navToggle');

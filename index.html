@@ -288,15 +288,15 @@
 
   <!-- ── NAV ── -->
   <nav>
-    <a href="#hero" class="nav-logo">Ian Kehayes</a>
+    <a href="/" class="nav-logo">Ian Kehayes</a>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#work-3d">3D Work</a></li>
-      <li><a href="#design">Design</a></li>
-      <li><a href="#digital-illustration">Illustration</a></li>
-      <li><a href="#photography">Photography</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/work">3D Work</a></li>
+      <li><a href="/design">Design</a></li>
+      <li><a href="/illustration">Illustration</a></li>
+      <li><a href="/photography">Photography</a></li>
+      <li><a href="/projects">Projects</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
       <span></span><span></span><span></span>
@@ -310,7 +310,7 @@
     <div class="hero-content">
       <h1>Light. <em>Render.</em> Composite.</h1>
       <p class="hero-sub">Crafting immersive 3D experiences, bespoke designs, and digital illustrations.</p>
-      <a href="#work-3d" class="hero-cta">
+      <a href="/work" class="hero-cta">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         View My Work
       </a>
@@ -459,7 +459,7 @@
 
       </div>
       <div style="text-align:center;margin-top:2.5rem;" class="reveal">
-        <a href="projects.html" style="
+        <a href="/projects" style="
           display: inline-block;
           font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
           border: 1px solid rgba(255,255,255,0.35); color: rgba(255,255,255,0.75);
@@ -642,6 +642,65 @@
   <script>
   /* ── Dynamic footer year ── */
   document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+  /* ════════════════════════════════════════
+     CLEAN URL NAVIGATION
+  ════════════════════════════════════════ */
+  const pathToSection = {
+    '/about':        'about',
+    '/work':         'work-3d',
+    '/design':       'design',
+    '/illustration': 'digital-illustration',
+    '/photography':  'photography',
+    '/contact':      'contact'
+  };
+  const sectionToPath = {};
+  Object.entries(pathToSection).forEach(([p, id]) => sectionToPath[id] = p);
+
+  // Intercept nav/hero-cta link clicks → smooth scroll + pushState
+  document.querySelectorAll('a[href^="/"]').forEach(link => {
+    const path = new URL(link.href, location.origin).pathname;
+    if (!pathToSection[path]) return;
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const el = document.getElementById(pathToSection[path]);
+      if (el) { el.scrollIntoView({ behavior: 'smooth' }); history.pushState({}, '', path); }
+    });
+  });
+
+  // Logo click → scroll to top + clean URL
+  document.querySelector('.nav-logo').addEventListener('click', e => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    history.pushState({}, '', '/');
+  });
+
+  // Handle direct URL access (redirected here by 404.html)
+  const savedPath = sessionStorage.getItem('ghp_path');
+  if (savedPath && pathToSection[savedPath]) {
+    sessionStorage.removeItem('ghp_path');
+    history.replaceState({}, '', savedPath);
+    const target = document.getElementById(pathToSection[savedPath]);
+    if (target) setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 80);
+  }
+
+  // Update URL as user scrolls into each section
+  const urlObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && sectionToPath[e.target.id]) {
+        history.replaceState({}, '', sectionToPath[e.target.id]);
+      }
+    });
+  }, { threshold: 0.35 });
+  // Also reset to / when hero is visible
+  const heroUrlObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) history.replaceState({}, '', '/');
+  }, { threshold: 0.2 });
+  heroUrlObs.observe(document.getElementById('hero'));
+  Object.values(pathToSection).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) urlObs.observe(el);
+  });
 
   /* ════════════════════════════════════════
      UTILITY

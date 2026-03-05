@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ian Kehayes</title>
+</head>
+<script>
+  (function () {
+    var path = window.location.pathname;
+    // /projects → load projects.html then let it clean its own URL
+    if (path === '/projects' || path === '/projects/') {
+      window.location.replace('/projects.html');
+    } else {
+      // All other clean paths (/about, /work, /design, etc.)
+      // Store the path and redirect to / — index.html will scroll to the right section
+      sessionStorage.setItem('ghp_path', path);
+      window.location.replace('/');
+    }
+  })();
+</script>
+</html>
