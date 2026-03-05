@@ -1177,38 +1177,18 @@
      CONTACT FORM — Formspree AJAX
   ════════════════════════════════════════ */
   const form    = document.getElementById('contactForm');
-  // ── Video visibility: pause when off-screen, play when in view (concurrent limit) ──
+  // ── Video visibility: play when in view, pause when out of view ──
   (function () {
     const gridVids = document.querySelectorAll('.canvas-card video');
     if (!gridVids.length || !('IntersectionObserver' in window)) return;
-    const isMobile = window.innerWidth < 768;
-    const MAX_PLAYING = isMobile ? 2 : 4;
-    const playing = [];   // ordered oldest→newest
     const timers = new WeakMap();
-
-    function tryPlay(vid) {
-      if (playing.includes(vid)) return;
-      // If at limit, pause the oldest video to free a slot
-      if (playing.length >= MAX_PLAYING) {
-        const oldest = playing.shift();
-        oldest.pause();
-      }
-      vid.play().catch(() => {});
-      playing.push(vid);
-    }
-
-    function doPause(vid) {
-      vid.pause();
-      const i = playing.indexOf(vid);
-      if (i !== -1) playing.splice(i, 1);
-    }
 
     const vidObs = new IntersectionObserver(entries => {
       entries.forEach(({ target, isIntersecting }) => {
         clearTimeout(timers.get(target));
         timers.set(target, setTimeout(() => {
-          if (isIntersecting) { tryPlay(target); }
-          else                { doPause(target); }
+          if (isIntersecting) { target.play().catch(() => {}); }
+          else                { target.pause(); }
         }, 200));
       });
     }, { threshold: 0.4, rootMargin: '-60px 0px' });
